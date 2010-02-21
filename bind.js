@@ -1,7 +1,7 @@
-var evt = require("events");
-var fs = require("fs");
-
 (function(context) {
+    var evt = require("events");
+    var fs = require("fs");
+    
     context.bind = function bind(file, context) {
         var promise = new evt.Promise();
         
