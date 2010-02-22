@@ -9,7 +9,7 @@
         
         fs.readFile(file).addCallback(function(data) {
             var bound = data.replace(/{{(.+?)}}/g, function(match, item) {
-                var split = item.match(/(.+?)\s*?:(.+)/) || [];
+                var split = item.match(/\s*(.+?)\s*:(.+)/) || [];
                 var key = split[1] || item, defVal = split[2] || "";
                 var val = context[key];
                 
