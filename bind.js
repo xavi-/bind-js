@@ -1,11 +1,15 @@
-(function(context, undefined) {
+(function(bind, undefined) {
     var evt = require("events");
     var fs = require("fs");
     var sys = require("sys");
     var toString = Object.prototype.toString;
     
+    function cleanUp(val) { 
+        return val.replace(/\[\{/g, "{{").replace(/}]/g, "}}");
+    }
+    
     function binder(binds, item) {
-        var split = item.match(/\s*(.+?)\s*:([\s\S]+)/) || [];
+        var split = item.match(/\s*(.+?)\s*:\s*([\s\S]+)\s*/) || [];
         var key = split[1] || item, defVal = split[2] || "";
         var val = binds[key];
         sys.puts("key: " + key + "; val: " + val + "; defVal: " + defVal);
@@ -18,16 +22,24 @@
         if(toString.call(val) === "[object Number]") { return val.toString(); }
         
         if(toString.call(val) === "[object Boolean]") { return val.toString(); }
+        
+        defVal = cleanUp(defVal);
+        if(!val.length) { return bind.to(defVal, val); }
+        
+        return Array.prototype.map.call(val, function(binds) { return bind.to(defVal, binds); }).join("");
     }
     
-    context.bind = function bind(file, binds) {
+    bind.toFile = function toFile(file, binds) {
         var promise = new evt.Promise();
         
         fs.readFile(file).addCallback(function(data) {
-            var bound = data.replace(/{{([\s\S]+?)}}/g, function(_, item) { return binder(binds, item); });
-            promise.emitSuccess(bound);
+            promise.emitSuccess(bind.to(data, binds));
         });
         
         return promise;
+    };
+    
+    bind.to = function to(string, binds) {
+        return string.replace(/{{([\s\S]+?)}}/g, function(_, item) { return binder(binds, item); });
     };
 }) (exports);
