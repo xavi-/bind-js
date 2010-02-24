@@ -2,6 +2,8 @@
 
 A simple templating engine for node js.  Its influences are mustache and the lift templating engine.
 
+Currently only works with Node v0.1.29
+
 ### Developed by
 * Xavi Ramirez
 
@@ -12,9 +14,9 @@ The mark up:
     <h1>Hello, {{user}}</h1>
 
 The Code:
-    var bind = require("bind").bind;
+    var bind = require("bind");
 
-    var promise = bind("./file.html", { user: "Xavi" });
+    var promise = bind.toFile("./file.html", { user: "Xavi" });
 
     promise.addCallback(function(bound) { /* bound === "<h1>Hello, Xavi</h1>" */ });
 
@@ -24,9 +26,9 @@ The mark up:
     <h1>Hello, {{user:Anonymous}}</h1>
 
 The Code:
-    var bind = require("bind").bind;
+    var bind = require("bind");
     
-    var promise = bind("./file.html", {});
+    var promise = bind.toFile("./file.html", {});
     
     promise.addCallback(function(bound) { /* bound === "<h1>Hello, Anonymous</h1>" */ });
 
@@ -36,9 +38,9 @@ The mark up:
     <span>The time: {{time}}</span>
 
 The Code:
-    var bind = require("bind").bind;
+    var bind = require("bind");
 
-    var promise = bind("./file.html", { time: function() { return new Date().toString(); } });
+    var promise = bind.toFile("./file.html", { time: function() { return new Date().toString(); } });
 
     promise.addCallback(function(bound) { /* bound === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
 
@@ -50,10 +52,10 @@ The mark up:
     </div>
 
 The Code:
-    var bind = require("bind").bind;
+    var bind = require("bind");
 
-    var promise = bind("./file.html", 
-                       { "blog-entry": { "blog-title": "The Sun Shines", "publish-date": "Jan 1, 1984" } });
+    var promise = bind.toFile("./file.html", 
+                              { "blog-entry": { "blog-title": "The Sun Shines", "publish-date": "Jan 1, 1984" } });
 
     promise.addCallback(function(bound) { 
         /* bound === "<div>
@@ -72,12 +74,12 @@ The mark up:
     </div>
 
 The Code:
-    var bind = require("bind").bind;
+    var bind = require("bind");
 
-    var promise = bind("./file.html", 
-                       { "blog-entry": [ { "blog-title": "The Sun Shines", "publish-date": "Jan 1, 1984" },
-                                         { "blog-title": "The Moon Glows", "publish-date": "Jan 19, 1984" },
-                                         { "blog-title": "Happy V-Day", "publish-date": "Feb 14, 1984" } ]});
+    var promise = bind.toFile("./file.html", 
+                              { "blog-entry": [ { "blog-title": "The Sun Shines", "publish-date": "Jan 1, 1984" },
+                                                { "blog-title": "The Moon Glows", "publish-date": "Jan 19, 1984" },
+                                                { "blog-title": "Happy V-Day", "publish-date": "Feb 14, 1984" } ]});
 
     promise.addCallback(function(bound) { 
         /* bound ===  "<div>
@@ -91,6 +93,11 @@ The Code:
         */ 
     });
 
+#### Things I hope to add:
+
+- Embedded files.  Example:
+    <body>[[file: ./embedded-template.html]]</body>
+    
 #### Escape characters
 
 These four characters must be escapes by adding \ before them: {, }, [, ]
