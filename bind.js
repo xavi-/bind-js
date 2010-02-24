@@ -1,11 +1,11 @@
 (function(context, undefined) {
     var evt = require("events");
     var fs = require("fs");
-    
+    var sys = require("sys");
     var toString = Object.prototype.toString;
     
     function binder(binds, item) {
-        var split = item.match(/\s*(.+?)\s*:(.+)/) || [];
+        var split = item.match(/\s*(.+?)\s*:([\s\S]+)/) || [];
         var key = split[1] || item, defVal = split[2] || "";
         var val = binds[key];
         sys.puts("key: " + key + "; val: " + val + "; defVal: " + defVal);
@@ -24,7 +24,7 @@
         var promise = new evt.Promise();
         
         fs.readFile(file).addCallback(function(data) {
-            var bound = data.replace(/{{(.+?)}}/g, function(_, item) { return binder(binds, item); });
+            var bound = data.replace(/{{([\s\S]+?)}}/g, function(_, item) { return binder(binds, item); });
             promise.emitSuccess(bound);
         });
         
