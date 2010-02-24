@@ -1,0 +1,99 @@
+## BindJS
+
+A simple templating engine for node js.  Its influences are mustache and the lift templating engine.
+
+### Developed by
+* Xavi Ramirez
+
+### Examples
+In the simplest case it looks likes mustache
+
+The mark up:
+    <h1>Hello, {{user}}</h1>
+
+The Code:
+    var bind = require("bind").bind;
+
+    var promise = bind("./file.html", { user: "Xavi" });
+
+    promise.addCallback(function(bound) { /* bound === "<h1>Hello, Xavi</h1>" */ });
+
+From there it differs a bit.  BindJS supports default values:
+
+The mark up:
+    <h1>Hello, {{user:Anonymous}}</h1>
+
+The Code:
+    var bind = require("bind").bind;
+    
+    var promise = bind("./file.html", {});
+    
+    promise.addCallback(function(bound) { /* bound === "<h1>Hello, Anonymous</h1>" */ });
+
+More examples!
+
+The mark up:
+    <span>The time: {{time}}</span>
+
+The Code:
+    var bind = require("bind").bind;
+
+    var promise = bind("./file.html", { time: function() { return new Date().toString(); } });
+
+    promise.addCallback(function(bound) { /* bound === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
+
+The mark up:
+    <div>{{blog-entry:
+        <h2>[{blog-title}]</h2>
+        <span>[{publish-date}]</span>
+    }}
+    </div>
+
+The Code:
+    var bind = require("bind").bind;
+
+    var promise = bind("./file.html", 
+                       { "blog-entry": { "blog-title": "The Sun Shines", "publish-date": "Jan 1, 1984" } });
+
+    promise.addCallback(function(bound) { 
+        /* bound === "<div>
+                         <h2>The Sun Shines</h2>
+                         <span>Jan 1, 1984</span>
+                     </div>"
+        */ 
+    });
+
+
+The mark up:
+    <div>{{blog-entry:
+        <h2>[{blog-title}]</h2>
+        <span>[{publish-date}]</span>
+    }}
+    </div>
+
+The Code:
+    var bind = require("bind").bind;
+
+    var promise = bind("./file.html", 
+                       { "blog-entry": [ { "blog-title": "The Sun Shines", "publish-date": "Jan 1, 1984" },
+                                         { "blog-title": "The Moon Glows", "publish-date": "Jan 19, 1984" },
+                                         { "blog-title": "Happy V-Day", "publish-date": "Feb 14, 1984" } ]});
+
+    promise.addCallback(function(bound) { 
+        /* bound ===  "<div>
+                            <h2>The Sun Shines</h2>
+                            <span>Jan 1, 1984</span>
+                            <h2>The Moon Glows</h2>
+                            <span>Jan 19, 1984</span>
+                            <h2>Happy V-Day</h2>
+                            <span>Feb 14, 1984</span>
+                        </div>"
+        */ 
+    });
+
+#### Escape characters
+
+These four characters must be escapes by adding \ before them: {, }, [, ]
+
+### License
+This project is released under [The MIT License](http://www.opensource.org/licenses/mit-license.php).
