@@ -8,10 +8,10 @@
         return val.replace(/\[\{/g, "{{").replace(/}]/g, "}}");
     }
     
-    function binder(binds, item) {
-        var split = item.match(/\s*(.+?)\s*:\s*([\s\S]+)\s*/) || [];
-        var key = split[1] || item, defVal = split[2] || "";
-        var val = binds[key];
+    function binder(tag, context) {
+        var split = tag.match(/\s*(.+?)\s*:\s*([\s\S]+)\s*/) || [];
+        var key = split[1] || tag, defVal = split[2] || "";
+        var val = context[key];
         sys.puts("key: " + key + "; val: " + val + "; defVal: " + defVal);
         if(val == undefined) { return defVal; }
         
@@ -26,20 +26,20 @@
         defVal = cleanUp(defVal);
         if(!val.length) { return bind.to(defVal, val); }
         
-        return Array.prototype.map.call(val, function(binds) { return bind.to(defVal, binds); }).join("");
+        return Array.prototype.map.call(val, function(context) { return bind.to(defVal, context); }).join("");
     }
     
-    bind.toFile = function toFile(file, binds) {
+    bind.toFile = function toFile(file, context) {
         var promise = new evt.Promise();
         
         fs.readFile(file).addCallback(function(data) {
-            promise.emitSuccess(bind.to(data, binds));
+            promise.emitSuccess(bind.to(data, context));
         });
         
         return promise;
     };
     
-    bind.to = function to(string, binds) {
-        return string.replace(/{{([\s\S]+?)}}/g, function(_, item) { return binder(binds, item); });
+    bind.to = function to(string, context) {
+        return string.replace(/{{([\s\S]+?)}}/g, function(_, tag) { return binder(tag, context); });
     };
 }) (exports);
