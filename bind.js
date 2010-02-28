@@ -29,14 +29,12 @@
         return Array.prototype.map.call(val, function(context) { return bind.to(defVal, context); }).join("");
     }
     
-    bind.toFile = function toFile(file, context) {
-        var promise = new evt.Promise();
-        
-        fs.readFile(file).addCallback(function(data) {
-            promise.emitSuccess(bind.to(data, context));
+    bind.toFile = function toFile(file, context, callback) {
+        fs.readFile(file, function(err, data) {
+            if(err) { throw err; }
+            
+            callback(bind.to(data, context));
         });
-        
-        return promise;
     };
     
     bind.to = function to(string, context) {
