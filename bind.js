@@ -1,5 +1,4 @@
 (function(bind, undefined) {
-    var evt = require("events");
     var fs = require("fs");
     var sys = require("sys");
     var toString = Object.prototype.toString;
