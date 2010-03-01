@@ -1,31 +1,39 @@
 (function(bind, undefined) {
     var fs = require("fs");
-    var sys = require("sys");
     var toString = Object.prototype.toString;
     
     function cleanUp(val) { 
         return val.replace(/\[\{/g, "{{").replace(/}]/g, "}}");
     }
     
-    function binder(tag, context, predefines) {
+    function binder(tag, context, predefines, callback) {
         var split = tag.match(/\s*(.+?)\s*:\s*([\s\S]+)\s*/) || [];
         var key = split[1] || tag, defVal = split[2] || "";
         var val = context[key] || predefines[key];
-        sys.puts("key: " + key + "; val: " + val + "; defVal: " + defVal);
-        if(val == undefined) { return defVal; }
         
-        if(toString.call(val) === "[object String]") { return val; }
+        if(val == undefined) { callback(defVal); return; }
         
-        if(toString.call(val) === "[object Function]") { return val(defVal, context); }
+        if(toString.call(val) === "[object String]") { callback(val); return; }
         
-        if(toString.call(val) === "[object Number]") { return val.toString(); }
+        if(toString.call(val) === "[object Function]") { callback(val(defVal, context).toString()); return; }
         
-        if(toString.call(val) === "[object Boolean]") { return val.toString(); }
+        if(toString.call(val) === "[object Number]") { callback(val.toString()); return; }
+        
+        if(toString.call(val) === "[object Boolean]") { callback(val.toString()); return; }
         
         defVal = cleanUp(defVal);
-        if(!val.length) { return bind.to(defVal, val); }
+        if(!val.length) { bind.to(defVal, val, callback); return; }
         
-        return Array.prototype.map.call(val, function(context) { return bind.to(defVal, context); }).join("");
+        var bindArray = new Array(val.length);
+        var fireCallback = (function() {
+            var count = val.length;
+            
+            return function() { if(--count === 0) { callback(bindArray.join("")); } };
+        })();
+        Array.prototype.forEach.call(val, function(context, idx) {
+            bind.to(defVal, context, function(data) { bindArray[idx] = data; fireCallback(); });
+        });
+        fireCallback();
     }
     
     bind.toFile = function toFile(name, context, callback) {
@@ -42,27 +50,42 @@
         function file(name, context) {
             var placeHolder = "[[file:" + name + "]]";
             
+            fileCount += 1;
+            
             fs.readFile(name, function(err, data) {
                 if(err) { throw err; }
                 
-                bind.to(data, context, function(data) { tmp = tmp.replace(placeHolder, data); fireCallback(); });
+                bind.to(data, context, function(data) {
+                    tmp = tmp.replace(placeHolder, data);
+                    fileCount -= 1; fireCallback(); 
+                });
             });
-            
-            fileCount += 1;
-            
+                        
             return placeHolder;
         }
         
         function fireCallback() {
-            if(fileCount-- > 0) { return; }
+            if(fileCount > 0) { return; }
+            
+            if(tagCount > 0) { return; }
             
             callback(tmp);
         }
         
         var predefines = { file: file };
-        var tmp = string.replace(/{{([\s\S]+?)}}/g, function(_, tag) { return binder(tag, context, predefines); });
-        if(callback) { fireCallback(); }
+        var tmp = string;
         
-        return tmp;
+        var matches = string.match(/{{[\s\S]+?}}/g);
+        if(!matches || matches.length === 0) { fireCallback(); return; }
+        
+        var tagCount = matches.length;
+        matches.forEach(function(tag) {
+            var trimmedTag = tag.substring(2, tag.length - 2); 
+            
+            binder(trimmedTag, context, predefines, function(data) {
+                tmp = tmp.replace(tag, data);
+                tagCount -= 1; fireCallback();
+            }); 
+        });
     };
 }) (exports);
