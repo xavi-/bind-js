@@ -7,16 +7,16 @@
         return val.replace(/\[\{/g, "{{").replace(/}]/g, "}}");
     }
     
-    function binder(tag, context) {
+    function binder(tag, context, predefines) {
         var split = tag.match(/\s*(.+?)\s*:\s*([\s\S]+)\s*/) || [];
         var key = split[1] || tag, defVal = split[2] || "";
-        var val = context[key];
+        var val = context[key] || predefines[key];
         sys.puts("key: " + key + "; val: " + val + "; defVal: " + defVal);
         if(val == undefined) { return defVal; }
         
         if(toString.call(val) === "[object String]") { return val; }
         
-        if(toString.call(val) === "[object Function]") { return val(defVal); }
+        if(toString.call(val) === "[object Function]") { return val(defVal, context); }
         
         if(toString.call(val) === "[object Number]") { return val.toString(); }
         
@@ -28,15 +28,41 @@
         return Array.prototype.map.call(val, function(context) { return bind.to(defVal, context); }).join("");
     }
     
-    bind.toFile = function toFile(file, context, callback) {
-        fs.readFile(file, function(err, data) {
+    bind.toFile = function toFile(name, context, callback) {
+        fs.readFile(name, function(err, data) {
             if(err) { throw err; }
             
-            callback(bind.to(data, context));
+            bind.to(data, context, callback);
         });
     };
     
-    bind.to = function to(string, context) {
-        return string.replace(/{{([\s\S]+?)}}/g, function(_, tag) { return binder(tag, context); });
+    bind.to = function to(string, context, callback) {
+        var fileCount = 0;
+        
+        function file(name, context) {
+            var placeHolder = "[[file:" + name + "]]";
+            
+            fs.readFile(name, function(err, data) {
+                if(err) { throw err; }
+                
+                bind.to(data, context, function(data) { tmp = tmp.replace(placeHolder, data); fireCallback(); });
+            });
+            
+            fileCount += 1;
+            
+            return placeHolder;
+        }
+        
+        function fireCallback() {
+            if(fileCount-- > 0) { return; }
+            
+            callback(tmp);
+        }
+        
+        var predefines = { file: file };
+        var tmp = string.replace(/{{([\s\S]+?)}}/g, function(_, tag) { return binder(tag, context, predefines); });
+        if(callback) { fireCallback(); }
+        
+        return tmp;
     };
 }) (exports);
