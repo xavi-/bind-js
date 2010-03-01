@@ -7,6 +7,14 @@ Currently only works with Node v0.1.29
 ### Developed by
 * Xavi Ramirez
 
+### Goals
+* Works on both Server and Client side
+* Simple markup
+* NO CODE IN TEMPLATES
+* Data driven
+* Easy to debug
+* Runs Fasto
+
 ### Examples
 In the simplest case it looks likes mustache
 
