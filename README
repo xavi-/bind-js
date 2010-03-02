@@ -13,7 +13,7 @@ Currently only works with Node v0.1.29
 * NO CODE IN TEMPLATES
 * Data driven
 * Easy to debug
-* Runs Fasto
+* Runs Fast
 
 ### Examples
 In the simplest case it looks likes mustache
