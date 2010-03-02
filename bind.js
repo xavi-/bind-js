@@ -7,8 +7,8 @@
     }
     
     function binder(tag, context, predefines, callback) {
-        var split = tag.match(/\s*(.+?)\s*:\s*([\s\S]+)\s*/) || [];
-        var key = split[1] || tag, defVal = split[2] || "";
+        var split = tag.match(/{{\s*(.+?)\s*:\s*([\s\S]+)\s*}}/) || [];
+        var key = split[1] || tag.match(/{{\s*(.+?)\s*}}/)[1], defVal = split[2] || "";
         var val = context[key] || predefines[key];
         
         if(val == undefined) { callback(defVal); return; }
@@ -56,7 +56,7 @@
                 if(err) { throw err; }
                 
                 bind.to(data, context, function(data) {
-                    tmp = tmp.replace(placeHolder, data);
+                    tmp = tmp.replace(placeHolder, data); 
                     fileCount -= 1; fireCallback(); 
                 });
             });
@@ -79,10 +79,8 @@
         if(!matches || matches.length === 0) { fireCallback(); return; }
         
         var tagCount = matches.length;
-        matches.forEach(function(tag) {
-            var trimmedTag = tag.substring(2, tag.length - 2); 
-            
-            binder(trimmedTag, context, predefines, function(data) {
+        matches.forEach(function(tag) {            
+            binder(tag, context, predefines, function(data) {
                 tmp = tmp.replace(tag, data);
                 tagCount -= 1; fireCallback();
             }); 
