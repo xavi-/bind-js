@@ -1,6 +1,37 @@
 (function(bind, undefined) {
-    var fs = require("fs");
     var toString = Object.prototype.toString;
+    
+    var retrieveFile = (function() {
+        if(typeof window !== "undefined") { // on client side
+            return (function() {
+                function xhr() { 
+                    return window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest(); 
+                }
+                
+                return function clientFile(name, callback) {
+                    var client = xhr();
+                    client.open("GET", name);
+                    client.onreadystatechange = function() {
+                        if(client.readyState !== 4) { return; }
+                        
+                        callback(client.responseText);
+                    };
+                    client.send();
+                };
+            })();
+        }
+        
+        return (function() { // on server side
+            var fs = require("fs");
+            return function serverFile(name, callback) {
+                fs.readFile(name, function(err, data) {
+                    if(err) { throw err; }
+                    
+                    callback(data); 
+                });
+            };
+        })();
+    })();
     
     function cleanUp(val) { 
         return val.replace(/\[\{/g, "{{").replace(/}]/g, "}}");
@@ -36,15 +67,11 @@
         fireCallback();
     }
     
-    bind.toFile = function toFile(name, context, callback) {
-        fs.readFile(name, function(err, data) {
-            if(err) { throw err; }
-            
-            bind.to(data, context, callback);
-        });
+    function toFile(name, context, callback) {
+        retrieveFile(name, function(data) { bind.to(data, context, callback); });
     };
     
-    bind.to = function to(string, context, callback) {
+    function to(string, context, callback) {
         var fileCount = 0;
         
         function file(name, context) {
@@ -52,9 +79,7 @@
             
             fileCount += 1;
             
-            fs.readFile(name, function(err, data) {
-                if(err) { throw err; }
-                
+            retrieveFile(name, function(data) {
                 bind.to(data, context, function(data) {
                     tmp = tmp.replace(placeHolder, data); 
                     fileCount -= 1; fireCallback(); 
@@ -86,4 +111,7 @@
             }); 
         });
     };
-}) (exports);
+    
+    bind.toFile = toFile;
+    bind.to = to;
+}) (typeof exports === "object" ? exports : (window.bind = {}));
