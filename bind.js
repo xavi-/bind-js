@@ -112,6 +112,7 @@
         });
     };
     
+    bind.setFileRetriever = function(retriever) { retrieveFile = retriever; };
     bind.toFile = toFile;
     bind.to = to;
 }) (typeof exports === "object" ? exports : (window.bind = {}));
