@@ -24,9 +24,8 @@ The mark up:
 The Code:
     var bind = require("bind");
 
-    var promise = bind.toFile("./file.html", { user: "Xavi" });
-
-    promise.addCallback(function(bound) { /* bound === "<h1>Hello, Xavi</h1>" */ });
+    bind.toFile("./file.html", { user: "Xavi" },
+                function callback(data) { /* data === "<h1>Hello, Xavi</h1>" */ });
 
 From there it differs a bit.  BindJS supports default values:
 
@@ -36,11 +35,11 @@ The mark up:
 The Code:
     var bind = require("bind");
     
-    var promise = bind.toFile("./file.html", {});
-    
-    promise.addCallback(function(bound) { /* bound === "<h1>Hello, Anonymous</h1>" */ });
+    bind.toFile("./file.html", {},
+                function callback(data) { /* data === "<h1>Hello, Anonymous</h1>" */ });
 
-More examples!
+
+#### Bind Functions
 
 The mark up:
     <span>The time: {{time}}</span>
@@ -48,9 +47,31 @@ The mark up:
 The Code:
     var bind = require("bind");
 
-    var promise = bind.toFile("./file.html", { time: function() { return new Date().toString(); } });
+    bind.toFile("./file.html", { time: function() { return new Date().toString(); } },
+                function callback(data) { /* data === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
 
-    promise.addCallback(function(bound) { /* bound === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
+#### Bind Objects
+    
+The mark up:
+    <div>{{blog-entry:
+        <h2>[{blog-title}]</h2>
+        <span>[{publish-date}]</span>
+    }}
+    </div>
+ 
+The Code:
+    var bind = require("bind");
+
+    bind.toFile("./file.html", 
+                { "blog-entry": { "blog-title": "The Sun Shines", "publish-date": "Jan 1, 1984" } },
+                function callback(data) { 
+                    /* data === "<div>
+                                     <h2>The Sun Shines</h2>
+                                     <span>Jan 1, 1984</span>
+                                 </div>" */ 
+                });
+
+#### Bind Arrays
 
 The mark up:
     <div>{{blog-entry:
@@ -62,49 +83,30 @@ The mark up:
 The Code:
     var bind = require("bind");
 
-    var promise = bind.toFile("./file.html", 
-                              { "blog-entry": { "blog-title": "The Sun Shines", "publish-date": "Jan 1, 1984" } });
+    bind.toFile("./file.html", 
+                { "blog-entry": [ { "blog-title": "The Sun Shines", "publish-date": "Jan 1, 1984" },
+                                  { "blog-title": "The Moon Glows", "publish-date": "Jan 19, 1984" },
+                                  { "blog-title": "Happy V-Day", "publish-date": "Feb 14, 1984" } ]},
+                function callback(data) { 
+                    /* data ===  "<div>
+                                        <h2>The Sun Shines</h2>
+                                        <span>Jan 1, 1984</span>
+                                        <h2>The Moon Glows</h2>
+                                        <span>Jan 19, 1984</span>
+                                        <h2>Happy V-Day</h2>
+                                        <span>Feb 14, 1984</span>
+                                    </div>" */ 
+                });
 
-    promise.addCallback(function(bound) { 
-        /* bound === "<div>
-                         <h2>The Sun Shines</h2>
-                         <span>Jan 1, 1984</span>
-                     </div>"
-        */ 
-    });
-
+#### Embed files:
 
 The mark up:
-    <div>{{blog-entry:
-        <h2>[{blog-title}]</h2>
-        <span>[{publish-date}]</span>
-    }}
-    </div>
-
-The Code:
+    <div>{{file: sales-report.txt}}</div>
+    
+The code:
     var bind = require("bind");
 
-    var promise = bind.toFile("./file.html", 
-                              { "blog-entry": [ { "blog-title": "The Sun Shines", "publish-date": "Jan 1, 1984" },
-                                                { "blog-title": "The Moon Glows", "publish-date": "Jan 19, 1984" },
-                                                { "blog-title": "Happy V-Day", "publish-date": "Feb 14, 1984" } ]});
-
-    promise.addCallback(function(bound) { 
-        /* bound ===  "<div>
-                            <h2>The Sun Shines</h2>
-                            <span>Jan 1, 1984</span>
-                            <h2>The Moon Glows</h2>
-                            <span>Jan 19, 1984</span>
-                            <h2>Happy V-Day</h2>
-                            <span>Feb 14, 1984</span>
-                        </div>"
-        */ 
-    });
-
-#### Things I hope to add:
-
-- Embedded files.  Example:
-    <body>[[file: ./embedded-template.html]]</body>
+    bind.toFile("./file.html", {}, function callback(data) { /* data === <div>...file contents...</div> */ });
     
 #### Escape characters
 
