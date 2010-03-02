@@ -2,7 +2,7 @@
 
 A simple templating engine for node js.  Its influences are mustache and the lift templating engine.
 
-Currently only works with Node v0.1.29
+Currently works with Node v0.1.30
 
 ### Developed by
 * Xavi Ramirez
@@ -110,7 +110,7 @@ The code:
     
 #### Escape characters
 
-These four characters must be escapes by adding \ before them: {, }, [, ]
+These four characters must be escapes by adding \ before them: {, }, [, ] 
 
 ### License
 This project is released under [The MIT License](http://www.opensource.org/licenses/mit-license.php).
