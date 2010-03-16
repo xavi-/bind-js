@@ -19,7 +19,7 @@ Currently works with Node v0.1.30
 In the simplest case it looks likes mustache
 
 The mark up:
-    <h1>Hello, {{user}}</h1>
+    <h1>Hello, {:user:}</h1>
 
 The Code:
     var bind = require("bind");
@@ -30,7 +30,7 @@ The Code:
 From there it differs a bit.  BindJS supports default values:
 
 The mark up:
-    <h1>Hello, {{user:Anonymous}}</h1>
+    <h1>Hello, {:user:Anonymous:}</h1>
 
 The Code:
     var bind = require("bind");
@@ -42,7 +42,7 @@ The Code:
 #### Bind Functions
 
 The mark up:
-    <span>The time: {{time}}</span>
+    <span>The time: {:time:}</span>
 
 The Code:
     var bind = require("bind");
@@ -53,10 +53,10 @@ The Code:
 #### Bind Objects
     
 The mark up:
-    <div>{{blog-entry:
-        <h2>[{blog-title}]</h2>
-        <span>[{publish-date}]</span>
-    }}
+    <div>{:blog-entry:
+        <h2>[:blog-title:]</h2>
+        <span>[:publish-date:]</span>
+    :}
     </div>
  
 The Code:
@@ -74,10 +74,10 @@ The Code:
 #### Bind Arrays
 
 The mark up:
-    <div>{{blog-entry:
-        <h2>[{blog-title}]</h2>
-        <span>[{publish-date}]</span>
-    }}
+    <div>{:blog-entry:
+        <h2>[:blog-title:]</h2>
+        <span>[:publish-date:]</span>
+    :}
     </div>
 
 The Code:
@@ -101,16 +101,18 @@ The Code:
 #### Embed files:
 
 The mark up:
-    <div>{{file: sales-report.txt}}</div>
+    <div>{:file: sales-report.txt:}</div>
     
 The code:
     var bind = require("bind");
 
     bind.toFile("./file.html", {}, function callback(data) { /* data === <div>...file contents...</div> */ });
     
-#### Escape characters
+### Escape characters
 
-These four characters must be escapes by adding \ before them: {, }, [, ] 
+To escape {:, :}, [:, and :], add a \ in the middle.
+
+Escaped delimiters: {\:, :\}, [\:, and :\]
 
 ### License
 This project is released under [The MIT License](http://www.opensource.org/licenses/mit-license.php).
