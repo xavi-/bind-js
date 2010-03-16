@@ -34,12 +34,12 @@
     })();
     
     function cleanUp(val) { 
-        return val.replace(/\[\{/g, "{{").replace(/}]/g, "}}");
+        return val.replace(/\[:/g, "{:").replace(/:]/g, ":}");
     }
     
     function binder(tag, context, predefines, callback) {
-        var split = tag.match(/{{\s*(.+?)\s*:\s*([\s\S]+)\s*}}/) || [];
-        var key = split[1] || tag.match(/{{\s*(.+?)\s*}}/)[1], defVal = split[2] || "";
+        var split = tag.match(/{:\s*(.+?)\s*:\s*([\s\S]+)\s*:}/) || [];
+        var key = split[1] || tag.match(/{:\s*(.+?)\s*:}/)[1], defVal = split[2] || "";
         var val = context[key] || predefines[key];
         
         if(val == undefined) { callback(defVal); return; }
@@ -100,7 +100,7 @@
         var predefines = { file: file };
         var tmp = string;
         
-        var matches = string.match(/{{[\s\S]+?}}/g);
+        var matches = string.match(/{:[\s\S]+?:}/g);
         if(!matches || matches.length === 0) { fireCallback(); return; }
         
         var tagCount = matches.length;
