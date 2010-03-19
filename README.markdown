@@ -1,6 +1,6 @@
 # BindJS
 
-A simple templating engine that smiles back.  It's influenced by mustache and the lift templating engine.
+A simple templating engine for node.js that smiles back.  It's influenced by mustache and the lift templating engine.
 
 Currently works with Node v0.1.30
 
@@ -8,10 +8,9 @@ Currently works with Node v0.1.30
 * Xavi Ramirez
 
 ## Goals
-* Works on both Server and Client side
-* Simple markup
+* Works on both the server and client side
 * NO CODE IN TEMPLATES
-* Data driven
+* Simple markup
 * Easy to debug
 * Fast
 
@@ -78,7 +77,7 @@ From there it differs a bit.  BindJS supports default values:
     bind.toFile("./file.html", 
                 { "blog-entry": [ { "blog-title": "The Sun Shines", "publish-date": "Jan 1, 1984" },
                                   { "blog-title": "The Moon Glows", "publish-date": "Jan 19, 1984" },
-                                  { "blog-title": "Happy V-Day", "publish-date": "Feb 14, 1984" } ]},
+                                  { "blog-title": "Happy V-Day", "publish-date": "Feb 14, 1984" } ] },
                 function callback(data) { 
                     /* data ===  "<div>
                                         <h2>The Sun Shines</h2>
