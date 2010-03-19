@@ -19,9 +19,8 @@ Currently works with Node v0.1.30
 In the simplest case it looks likes mustache
 
 The mark up:
-<pre>
     <h1>Hello, {:user:}</h1>
-</pre>
+
 The Code:
     var bind = require("bind");
 
