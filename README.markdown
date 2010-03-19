@@ -1,21 +1,21 @@
-## BindJS
+# BindJS
 
 A simple templating engine for node js.  Its influences are mustache and the lift templating engine.
 
 Currently works with Node v0.1.30
 
-### Developed by
+## Developed by
 * Xavi Ramirez
 
-### Goals
+## Goals
 * Works on both Server and Client side
 * Simple markup
 * NO CODE IN TEMPLATES
 * Data driven
 * Easy to debug
-* Runs Fast
+* Fast
 
-### Examples
+## Examples
 In the simplest case it looks likes mustache
 
 The mark up:
@@ -39,7 +39,7 @@ The Code:
                 function callback(data) { /* data === "<h1>Hello, Anonymous</h1>" */ });
 
 
-#### Bind Functions
+### Bind Functions
 
 The mark up:
     <span>The time: {:time:}</span>
@@ -50,7 +50,7 @@ The Code:
     bind.toFile("./file.html", { time: function() { return new Date().toString(); } },
                 function callback(data) { /* data === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
 
-#### Bind Objects
+### Bind Objects
     
 The mark up:
     <div>{:blog-entry:
@@ -71,7 +71,7 @@ The Code:
                                  </div>" */ 
                 });
 
-#### Bind Arrays
+### Bind Arrays
 
 The mark up:
     <div>{:blog-entry:
@@ -98,7 +98,7 @@ The Code:
                                     </div>" */ 
                 });
 
-#### Embed files:
+### Embed files:
 
 The mark up:
     <div>{:file: sales-report.txt:}</div>
@@ -108,11 +108,11 @@ The code:
 
     bind.toFile("./file.html", {}, function callback(data) { /* data === <div>...file contents...</div> */ });
     
-### Escape characters
+## Escape characters
 
 To escape {:, :}, [:, and :], add a \ in the middle.
 
 Escaped delimiters: {\:, :\}, [\:, and :\]
 
-### License
+## License
 This project is released under [The MIT License](http://www.opensource.org/licenses/mit-license.php).
