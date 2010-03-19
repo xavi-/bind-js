@@ -102,7 +102,7 @@ From there it differs a bit.  BindJS supports default values:
 
 To escape {:, :}, [:, and :], add a \ in the middle.
 
-Escaped delimiters: {\:, :\}, [\:, and :\]
+Escaped delimiters: {\:, :\\}, [\:, and :\\]
 
 ## License
 This project is released under [The MIT License](http://www.opensource.org/licenses/mit-license.php).
