@@ -100,7 +100,7 @@ When binding to a function the default value is past as the first parameter.
 
 ### Embed files:
 ####The mark up:
-    <div>{:file -> sales-report.txt:}</div>
+    <div>{:file -> ./sales-report.txt:}</div>
 ####The code:
     var bind = require("bind");
 
