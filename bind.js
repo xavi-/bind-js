@@ -38,7 +38,7 @@
     }
     
     function binder(tag, context, predefines, callback) {
-        var split = tag.match(/{:\s*(.+?)\s*:\s*([\s\S]+)\s*:}/) || [];
+        var split = tag.match(/{:\s*(.+?)\s*->\s*([\s\S]+)\s*:}/) || [];
         var key = split[1] || tag.match(/{:\s*(.+?)\s*:}/)[1], defVal = split[2] || "";
         var val = context[key] || predefines[key];
         

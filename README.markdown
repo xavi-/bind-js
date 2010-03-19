@@ -28,7 +28,7 @@ In the simplest case it looks likes mustache
 
 From there it differs a bit.  BindJS supports default values:
 ####The mark up:
-    <h1>Hello, {:user:Anonymous:}</h1>
+    <h1>Hello, {:user -> Anonymous:}</h1>
 ####The Code:
     var bind = require("bind");
     
@@ -45,9 +45,18 @@ From there it differs a bit.  BindJS supports default values:
     bind.toFile("./file.html", { time: function() { return new Date().toString(); } },
                 function callback(data) { /* data === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
 
+When binding to a function the default value is past as the first parameter.
+####The mark up:
+    <span>Two squared is {:square -> 2:}</span>
+####The Code:
+    var bind = require("bind");
+
+    bind.toFile("./file.html", { square: function(val) { return val * val; } },
+                function callback(data) { /* data === "<span>Two squared is 4</span>" */ });
+
 ### Bind Objects
 ####The mark up:
-    <div>{:blog-entry:
+    <div>{:blog-entry ->
         <h2>[:blog-title:]</h2>
         <span>[:publish-date:]</span>
     :}
@@ -66,7 +75,7 @@ From there it differs a bit.  BindJS supports default values:
 
 ### Bind Arrays
 ####The mark up:
-    <div>{:blog-entry:
+    <div>{:blog-entry ->
         <h2>[:blog-title:]</h2>
         <span>[:publish-date:]</span>
     :}
@@ -91,11 +100,12 @@ From there it differs a bit.  BindJS supports default values:
 
 ### Embed files:
 ####The mark up:
-    <div>{:file: sales-report.txt:}</div>
+    <div>{:file -> sales-report.txt:}</div>
 ####The code:
     var bind = require("bind");
 
-    bind.toFile("./file.html", {}, function callback(data) { /* data === <div>...file contents...</div> */ });
+    bind.toFile("./file.html", {}, 
+                function callback(data) { /* data === <div>...file contents...</div> */ });
     
 ## Escape characters
 
