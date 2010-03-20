@@ -2,7 +2,7 @@
 
 A simple templating engine for node.js that smiles back.  It's influenced by mustache and the lift templating engine.
 
-Currently works with Node v0.1.30
+Currently works with Node v0.1.33
 
 ## Developed by
 * Xavi Ramirez
