@@ -12,6 +12,7 @@ Currently works with Node v0.1.33
 * NO CODE IN TEMPLATES
 * Simple markup
 * Easy to debug
+* Asynchronous
 * Fast
 
 ## Examples
@@ -45,7 +46,7 @@ From there it differs a bit.  BindJS supports default values:
     bind.toFile("./file.html", { time: function() { return new Date().toString(); } },
                 function callback(data) { /* data === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
 
-When binding to a function the default value is past as the first parameter.
+The default value is past as the first parameter to the bound function.  Also note that `.toString` is called on the result.
 ####The mark up:
     <span>Two squared is {:square -> 2:}</span>
 ####The Code:
@@ -106,8 +107,33 @@ When binding to a function the default value is past as the first parameter.
 
     bind.toFile("./file.html", {}, 
                 function callback(data) { /* data === <div>...file contents...</div> */ });
-    
-## Escape characters
+
+All paths are relative of the current working directory of the node process (aka `process.cwd()`) or the current path (aka `window.location`).
+
+## Client side
+
+To use bind on the client side, simply add the following `script` to your page:
+    <script type="text/javascript" src="/lib/bind/bind.js"></script>
+
+Once executed an object called `window.bind` is created.  This object contains all the functionality of bind on the server side.  The only difference is that on the client side, bind uses an `XHR` request to retrieve the contents of an embedded file instead of `require("fs").readFile`. Note that this functionality can be overwritten with `bind.setFileRetrieve`.
+
+## The API
+
+__`bind.to(template, context, callback)`__: `callback` is called with the results of binding the `template` and `context`.  See the above examples from more details.
+
+__`bind.toFile(path, context, callback)`__: The file content of `path` are loaded with the file retriever (see the `bind.setFileRetriever` for more details) and passed to `bind.to` as the `template`.
+
+__`bind.setFileRetriever(retrieve_fn)`__: `retrieve_fn` is responsible for providing content for `bind.toFile` as well as embedded files.  It should take a `path` and `callback` as parameters.  The `callback` should be executed once the `path` contents are ready. Here's a quick example:
+
+    bind.setFileRetriever(function(path, callback) { // Look in DOM before making XHR request
+        var elem = document.getElementById(path);
+        if(elem) { callback(elem.innerHTML); }
+        else { this.default(path, callback); } // Calls default file retrieve
+    });
+
+By default bind retrieves files with `require("fs").readFile` on the server side and with an `XHR` request on the client side.  Paths are assumed to be relative to the current working directory of the node process (aka `process.cwd()`) or the current path (aka `window.location`).
+
+## Escaped characters
 
 To escape {:, :}, [:, and :], add a \ in the middle.
 
