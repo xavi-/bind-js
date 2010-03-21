@@ -8,9 +8,9 @@
                     return window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest(); 
                 }
                 
-                return function clientFile(name, callback) {
+                return function clientFile(path, callback) {
                     var client = xhr();
-                    client.open("GET", name);
+                    client.open("GET", path);
                     client.onreadystatechange = function() {
                         if(client.readyState !== 4) { return; }
                         
@@ -23,8 +23,8 @@
         
         return (function() { // on server side
             var fs = require("fs");
-            return function serverFile(name, callback) {
-                fs.readFile(name, function(err, data) {
+            return function serverFile(path, callback) {
+                fs.readFile(path, function(err, data) {
                     if(err) { throw err; }
                     
                     callback(data); 
@@ -67,19 +67,19 @@
         fireCallback();
     }
     
-    function toFile(name, context, callback) {
-        retrieveFile(name, function(data) { bind.to(data, context, callback); });
+    function toFile(path, context, callback) {
+        retrieveFile(path, function(data) { bind.to(data, context, callback); });
     };
     
     function to(string, context, callback) {
         var fileCount = 0;
         
-        function file(name, context) {
-            var placeHolder = "[[file:" + name + "]]";
+        function file(path, context) {
+            var placeHolder = "[[file:" + path + "]]";
             
             fileCount += 1;
             
-            retrieveFile(name, function(data) {
+            retrieveFile(path, function(data) {
                 bind.to(data, context, function(data) {
                     tmp = tmp.replace(placeHolder, data); 
                     fileCount -= 1; fireCallback(); 
