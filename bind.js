@@ -1,7 +1,8 @@
 (function(bind, undefined) {
     var toString = Object.prototype.toString;
     
-    var retrieveFile = (function() {
+    var retrieveFile, defaultRetrieveFile;
+    retrieveFile = defaultRetrieveFile = (function() {
         if(typeof window !== "undefined") { // on client side
             return (function() {
                 function xhr() { 
@@ -112,7 +113,9 @@
         });
     };
     
-    bind.setFileRetriever = function(retriever) { retrieveFile = retriever; };
+    bind.setFileRetriever = function(retriever) {
+        retrieveFile = function() { return retriever.apply({ "default": defaultRetrieveFile }, arguments); }; 
+    };
     bind.toFile = toFile;
     bind.to = to;
 }) (typeof exports === "object" ? exports : (window.bind = {}));
