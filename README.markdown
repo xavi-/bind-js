@@ -130,7 +130,6 @@ Once executed an object called `window.bind` is created.  This object contains a
             if(elem) { callback(elem.innerHTML); }
             else { this.default(path, callback); } // Calls default file retrieve
         });
-
 By default bind retrieves files with `require("fs").readFile` on the server side and with an `XHR` request on the client side.  Paths are assumed to be relative to the current working directory of the node process (aka `process.cwd()`) or the current path (aka `window.location`).
 
 ## Escaped characters
