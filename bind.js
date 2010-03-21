@@ -84,9 +84,9 @@
             
             fileCount += 1;
             
-            toFile(path, context, function(data) {
-                tmp = tmp.replace(placeHolder, data); 
-                fileCount -= 1; fireCallback(); 
+            bind.toFile(path, context, function(data) {
+                tmp = tmp.replace(placeHolder, data);
+                fileCount -= 1; fireCallback();
             });
                         
             return placeHolder;
