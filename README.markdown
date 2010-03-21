@@ -119,11 +119,14 @@ Once executed an object called `window.bind` is created.  This object contains a
 
 ## The API
 
-__`bind.to(template, context, callback)`__: `callback` is called with the results of binding the `template` and `context`.  See the above examples from more details.
+###__`bind.to(template, context, callback)`__:
+The `callback` is called with the results of binding the `template` and `context`.  See the above examples from more details.
 
-__`bind.toFile(path, context, callback)`__: The file content of `path` are loaded with the file retriever (see the `bind.setFileRetriever` for more details) and passed to `bind.to` as the `template`.
+###__`bind.toFile(path, context, callback)`__:
+The file content of `path` are loaded with the file retriever (see the `bind.setFileRetriever` for more details) and passed to `bind.to` as the `template`.
 
-__`bind.setFileRetriever(retrieve_fn)`__: `retrieve_fn` is responsible for providing content for `bind.toFile` as well as embedded files.  It should take a `path` and `callback` as parameters.  The `callback` should be executed once the `path` contents are ready. Here's a quick example:
+###__`bind.setFileRetriever(retrieve_fn)`__:
+The `retrieve_fn` function is responsible for providing content for `bind.toFile` as well as embedded files.  It should take a `path` and `callback` as parameters.  The `callback` should be executed once the `path` contents are ready. Here's a quick example:
 
     bind.setFileRetriever(function(path, callback) { // Look in DOM before making XHR request
         var elem = document.getElementById(path);
