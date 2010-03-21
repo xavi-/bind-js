@@ -71,7 +71,7 @@
         retrieveFile(path, function(data) { bind.to(data, context, callback); });
     };
     
-    function to(string, context, callback) {
+    function to(template, context, callback) {
         var fileCount = 0;
         
         function file(path, context) {
@@ -98,9 +98,9 @@
         }
         
         var predefines = { file: file };
-        var tmp = string;
+        var tmp = template;
         
-        var matches = string.match(/{:[\s\S]+?:}/g);
+        var matches = template.match(/{:[\s\S]+?:}/g);
         if(!matches || matches.length === 0) { fireCallback(); return; }
         
         var tagCount = matches.length;
