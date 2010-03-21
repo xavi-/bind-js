@@ -34,6 +34,10 @@
         })();
     })();
     
+    function unescape(val) {
+        return val.replace(/\[\\:/g, "[:").replace(/:\\]/g, ":]").replace(/\{\\:/g, "{:").replace(/:\\}/g, ":}");
+    }
+    
     function cleanUp(val) { 
         return val.replace(/\[:/g, "{:").replace(/:]/g, ":}");
     }
@@ -93,7 +97,7 @@
             
             if(tagCount > 0) { return; }
             
-            callback(tmp);
+            callback(unescape(tmp));
         }
         
         var predefines = { file: file };
