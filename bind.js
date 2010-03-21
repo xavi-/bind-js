@@ -80,11 +80,9 @@
             
             fileCount += 1;
             
-            retrieveFile(path, function(data) {
-                bind.to(data, context, function(data) {
-                    tmp = tmp.replace(placeHolder, data); 
-                    fileCount -= 1; fireCallback(); 
-                });
+            toFile(path, context, function(data) {
+                tmp = tmp.replace(placeHolder, data); 
+                fileCount -= 1; fireCallback(); 
             });
                         
             return placeHolder;
