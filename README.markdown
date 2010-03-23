@@ -17,7 +17,7 @@ Currently works with Node v0.1.33
     
 ## The API
 
-- __`bind.to(template, context, callback)`__: the `callback` is called with the results of binding the `template` and `context`.  See the above examples from more details.
+- __`bind.to(template, context, callback)`__: the `callback` is called with the results of binding the `template` and `context`.  See examples below from more details.
 
 - __`bind.toFile(path, context, callback)`__: the file content of `path` are loaded with the file retriever (see the `bind.setFileRetriever` for more details) and passed to `bind.to` as the `template`.
 
@@ -29,6 +29,13 @@ Currently works with Node v0.1.33
             else { this.default(path, callback); } // Calls default file retrieve
         });
 By default bind retrieves files with `require("fs").readFile` on the server side and with an `XHR` request on the client side.  Paths are assumed to be relative to the current working directory of the node process (aka `process.cwd()`) or the current path (aka `window.location`).
+
+## Client side
+
+To use bind on the client side, simply add the following `script` to your page:
+    <script type="text/javascript" src="/lib/bind/bind.js"></script>
+
+Once executed an object called `window.bind` is created.  This object contains all the functionality of bind on the server side.  The only difference is that on the client side, bind uses an `XHR` request to retrieve the contents of an embedded file instead of `require("fs").readFile`. Note that this functionality can be overwritten with `bind.setFileRetrieve`.
 
 ## Examples
 In the simplest case it looks likes mustache
@@ -124,13 +131,6 @@ The default value is past as the first parameter to the bound function.  Also no
                 function callback(data) { /* data === <div>...file contents...</div> */ });
 
 All paths are relative of the current working directory of the node process (aka `process.cwd()`) or the current path (aka `window.location`).
-
-## Client side
-
-To use bind on the client side, simply add the following `script` to your page:
-    <script type="text/javascript" src="/lib/bind/bind.js"></script>
-
-Once executed an object called `window.bind` is created.  This object contains all the functionality of bind on the server side.  The only difference is that on the client side, bind uses an `XHR` request to retrieve the contents of an embedded file instead of `require("fs").readFile`. Note that this functionality can be overwritten with `bind.setFileRetrieve`.
 
 ### Deeply Nested Templates
 ####The Markup:
