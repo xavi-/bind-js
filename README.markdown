@@ -260,6 +260,7 @@ Once executed an object called `window.bind` is created.  This object contains a
 ## Escaped characters
 
 The following character combinations must be escaped to appear correctly in a bound template:
+
 * original: `(: [: (: <: -:  :- :> :) :] :)`
 * escaped: `(\: [\: {\: <\: -\:  :\- :\\> :\\} :\\] :\\)`
 
