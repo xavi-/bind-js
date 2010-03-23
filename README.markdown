@@ -259,7 +259,7 @@ All paths are relative of the current working directory of the node process (aka
 The following character combinations must be escaped to appear correctly in a bound template:
 
 * original: `(: [: (: <: -:  :- :> :) :] :)`
-* escaped: `(\: [\: {\: <\: -\:  :\- :\\> :\\} :\\] :\\)`
+* escaped: `(\: [\: {\: <\: -\:  :\- :\> :\} :\] :\)`
 
 ## Developed by
 * Xavi Ramirez
