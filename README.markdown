@@ -18,7 +18,7 @@ Currently works with Node v0.1.33
 ## Examples
 In the simplest case it looks likes mustache
 
-####The mark up:
+####The markup:
     <h1>Hello, {:user:}</h1>
 
 ####The Code:
@@ -28,7 +28,7 @@ In the simplest case it looks likes mustache
                 function callback(data) { /* data === "<h1>Hello, Xavi</h1>" */ });
 
 From there it differs a bit.  BindJS supports default values:
-####The mark up:
+####The markup:
     <h1>Hello, {:user -> Anonymous:}</h1>
 ####The Code:
     var bind = require("bind");
@@ -38,7 +38,7 @@ From there it differs a bit.  BindJS supports default values:
 
 
 ### Bind Functions
-####The mark up:
+####The markup:
     <span>The time: {:time:}</span>
 ####The Code:
     var bind = require("bind");
@@ -47,7 +47,7 @@ From there it differs a bit.  BindJS supports default values:
                 function callback(data) { /* data === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
 
 The default value is past as the first parameter to the bound function.  Also note that `.toString` is called on the result.
-####The mark up:
+####The markup:
     <span>Two squared is {:square -> 2:}</span>
 ####The Code:
     var bind = require("bind");
@@ -56,7 +56,7 @@ The default value is past as the first parameter to the bound function.  Also no
                 function callback(data) { /* data === "<span>Two squared is 4</span>" */ });
 
 ### Bind Objects
-####The mark up:
+####The markup:
     <div>{:blog-entry ->
         <h2>[:blog-title:]</h2>
         <span>[:publish-date:]</span>
@@ -75,7 +75,7 @@ The default value is past as the first parameter to the bound function.  Also no
                 });
 
 ### Bind Arrays
-####The mark up:
+####The markup:
     <div>{:blog-entry ->
         <h2>[:blog-title:]</h2>
         <span>[:publish-date:]</span>
@@ -100,7 +100,7 @@ The default value is past as the first parameter to the bound function.  Also no
                 });
 
 ### Embed files:
-####The mark up:
+####The markup:
     <div>{:file -> ./sales-report.txt:}</div>
 ####The code:
     var bind = require("bind");
