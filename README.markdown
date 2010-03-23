@@ -4,9 +4,6 @@ A simple templating engine for node.js that smiles back.  It's influenced by mus
 
 Currently works with Node v0.1.33
 
-## Developed by
-* Xavi Ramirez
-
 ## Goals
 * Works on both the server and client side
 * NO CODE IN TEMPLATES
@@ -263,6 +260,9 @@ The following character combinations must be escaped to appear correctly in a bo
 
 * original: `(: [: (: <: -:  :- :> :) :] :)`
 * escaped: `(\: [\: {\: <\: -\:  :\- :\\> :\\} :\\] :\\)`
+
+## Developed by
+* Xavi Ramirez
 
 ## License
 This project is released under [The MIT License](http://www.opensource.org/licenses/mit-license.php).
