@@ -45,7 +45,7 @@ In the simplest case it looks likes mustache
     bind.toFile("./file.html", { user: "Xavi" },
                 function callback(data) { /* data === "<h1>Hello, Xavi</h1>" */ });
 
-From there it differs a bit.  BindJS supports default values:
+From there bind differs a bit.  For example, default values are supported:
 ####The Markup:
     <h1>Hello, (:user -> Anonymous:)</h1>
 ####The Code:
