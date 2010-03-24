@@ -56,6 +56,8 @@ From there it differs a bit.  BindJS supports default values:
 
 
 ### Bind Functions
+One of bind's core goals is to eliminate all conditional logic from templates.  To remain expressive bind supports binding to functions.
+
 ####The Markup:
     <span>The time: (:time:)</span>
 ####The Code:
@@ -63,8 +65,6 @@ From there it differs a bit.  BindJS supports default values:
 
     bind.toFile("./file.html", { time: function() { return new Date().toString(); } },
                 function callback(data) { /* data === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
-
-The default value is past as the first parameter to the bound function.  Also note that `.toString` is called on the result.
 
 ####The Markup:
     <span>Two squared is (:square -> 2:)</span>
@@ -74,12 +74,13 @@ The default value is past as the first parameter to the bound function.  Also no
     bind.toFile("./file.html", { square: function(val) { return val * val; } },
                 function callback(data) { /* data === "<span>Two squared is 4</span>" */ });
 
+The default value is past as the first parameter to the bound function.  Also note that `.toString` is called on the result.
+
 ### Bind Objects
 ####The Markup:
     <div>(:blog-entry ->
         <h2>[:blog-title:]</h2>
-        <span>[:publish-date:]</span>
-    :)
+        <span>[:publish-date:]</span>:)
     </div>
 ####The Code:
     var bind = require("bind");
@@ -97,8 +98,7 @@ The default value is past as the first parameter to the bound function.  Also no
 ####The Markup:
     <div>(:blog-entry ->
         <h2>[:blog-title:]</h2>
-        <span>[:publish-date:]</span>
-    :)
+        <span>[:publish-date:]</span>:)
     </div>
 ####The Code:
     var bind = require("bind");
