@@ -140,7 +140,7 @@ All paths are relative of the current working directory of the node process (aka
             <td> 
                 <span class="day">{:day:}</span> - <span class="date">{:date:}</span>
                 <ol>{: events ->
-                    <li class="<:event-type:>" colspan=<:days:>>
+                    <li class="<:event-type:>">
                         <h3><:event-name:></h3>
                         <h4>The Guests:</h4>
                         <ul>
@@ -191,7 +191,7 @@ All paths are relative of the current working directory of the node process (aka
                             <td> 
                                 <span class="day">Monday</span> - <span class="date">15th</span>
 
-                                <ol><li class="" colspan=>
+                                <ol><li class="">
                                         <h3>Pre Booze</h3>
                                         <h4>The Guests:</h4>
                                         <ul>
@@ -202,7 +202,7 @@ All paths are relative of the current working directory of the node process (aka
                                 </ol>
                             </td><td> 
                                 <span class="day">Wednesday</span> - <span class="date">17th</span>
-                                <ol><li class="" colspan=>
+                                <ol><li class="">
                                         <h3>St. Patrick's</h3>
                                         <h4>The Guests:</h4>
 
@@ -214,7 +214,7 @@ All paths are relative of the current working directory of the node process (aka
                             </td><td> 
                                 <span class="day">Friday</span> - <span class="date">19th</span>
 
-                                <ol><li class="" colspan=>
+                                <ol><li class="">
                                         <h3>Slam Dance</h3>
                                         <h4>The Guests:</h4>
                                         <ul>
@@ -228,7 +228,7 @@ All paths are relative of the current working directory of the node process (aka
                             <th>week two</th>
                             <td> 
                                 <span class="day">Tuesday</span> - <span class="date">23th</span>
-                                <ol><li class="" colspan=>
+                                <ol><li class="">
 
                                         <h3>Rally Rock</h3>
                                         <h4>The Guests:</h4>
@@ -240,7 +240,7 @@ All paths are relative of the current working directory of the node process (aka
 
                             </td><td> 
                                 <span class="day">Wednesday</span> - <span class="date">24th</span>
-                                <ol><li class="" colspan=>
+                                <ol><li class="">
                                         <h3>Willy Woo Wonderland</h3>
                                         <h4>The Guests:</h4>
                                         <ul>
