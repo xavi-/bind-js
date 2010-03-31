@@ -47,7 +47,7 @@ In the simplest case it looks likes mustache
 
 From there bind differs a bit.  For example, default values are supported:
 ####The Markup:
-    <h1>Hello, (:user -> Anonymous:)</h1>
+    <h1>Hello, (:user ~ Anonymous:)</h1>
 ####The Code:
     var bind = require("bind");
     
@@ -67,7 +67,7 @@ One of bind's core goals is to eliminate all conditional logic from templates.  
                 function callback(data) { /* data === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
 
 ####The Markup:
-    <span>Two squared is (:square -> 2:)</span>
+    <span>Two squared is (:square ~ 2:)</span>
 ####The Code:
     var bind = require("bind");
 
@@ -78,7 +78,7 @@ Note that the default value is passed as the first parameter to the bound functi
 
 ### Bind Objects
 ####The Markup:
-    <div>(:blog-entry ->
+    <div>(:blog-entry ~
         <h2>[:blog-title:]</h2>
         <span>[:publish-date:]</span>:)
     </div>
@@ -96,7 +96,7 @@ Note that the default value is passed as the first parameter to the bound functi
 
 ### Bind Arrays
 ####The Markup:
-    <div>(:blog-entry ->
+    <div>(:blog-entry ~
         <h2>[:blog-title:]</h2>
         <span>[:publish-date:]</span>:)
     </div>
@@ -120,7 +120,7 @@ Note that the default value is passed as the first parameter to the bound functi
 
 ### Embed files:
 ####The Markup:
-    <div>(:file -> ./sales-report.txt:)</div>
+    <div>(:file ~ ./sales-report.txt:)</div>
 ####The Code:
     var bind = require("bind");
 
@@ -133,18 +133,18 @@ All paths are relative of the current working directory of the node process (aka
 ####The Markup:
     <table>
         <tr><th colspan=2>(:month-name:)</th></tr>
-        (: weeks ->
+        (: weeks ~
         <tr>
             <th>[:week-name:]</th>
-            [: days ->
+            [: days ~
             <td> 
                 <span class="day">{:day:}</span> - <span class="date">{:date:}</span>
-                <ol>{: events ->
-                    <li class="<:event-type:>">
-                        <h3><:event-name:></h3>
+                <ol>{: events ~
+                    <li class="|:event-type:|">
+                        <h3>|:event-name:|</h3>
                         <h4>The Guests:</h4>
                         <ul>
-                            <:guest-list -> <li>-:name:-</li>:>
+                            |:guest-list ~ <li>\:name:\</li>:|
                         </ul>
                     </li>:}
                 </ol>
@@ -258,8 +258,8 @@ All paths are relative of the current working directory of the node process (aka
 
 The following character combinations must be escaped to appear correctly in a bound template:
 
-* original: `(: [: (: <: -:  :- :> :) :] :)`
-* escaped: `(\: [\: {\: <\: -\:  :\- :\> :\} :\] :\)`
+* original: `(: [: (: |: \:  :\ :| :) :] :)`
+* escaped: `(\: [\: {\: |\: \\:  :\\ :\| :\} :\] :\)`
 
 ## Developed by
 * Xavi Ramirez
