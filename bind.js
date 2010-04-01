@@ -64,8 +64,8 @@
         
         if(toString.call(val) === "[object Boolean]") { callback(val.toString()); return; }
         
-        defVal = cleanUp(defVal);
-        if(!val.length) { bind.to(defVal, val, callback); return; }
+        defVal = cleanUp(defVal); 
+        if(toString.call(val) !== "[object Array]") { bind.to(defVal, val, callback); return; } // isObject
         
         var bindArray = new Array(val.length);
         var fireCallback = (function() {
@@ -73,7 +73,7 @@
             
             return function() { if(--count === 0) { callback(bindArray.join("")); } };
         })();
-        Array.prototype.forEach.call(val, function(context, idx) {
+        val.forEach(function(context, idx) {
             bind.to(defVal, context, function(data) { bindArray[idx] = data; fireCallback(); });
         });
         fireCallback();
