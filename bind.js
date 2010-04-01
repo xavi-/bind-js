@@ -83,11 +83,29 @@
         retrieveFile(path, function(data) { bind.to(data, context, callback); });
     };
     
+    var safeText = (function() {
+        var safe = {}, nextId = 0;
+        
+        function save(text) {
+            return text.replace(/(^:([\s\S]+?):^)/g, function(_, match) { 
+                var id = "(^:" + (nextId++) + ":^)";
+                safe[id] = match;
+                return id;
+            });
+        }
+        
+        function restore(text) {
+            return text.replace(/(^:\d+?:^)/g, function(id) { return safe[id]; });
+        }
+        
+        return { save: save, restore: restore };
+    })();
+    
     function to(template, context, callback) {
         var fileCount = 0;
         
         function file(path, context) {
-            var placeHolder = "[[file:" + path + "]]";
+            var placeHolder = "(^:file:" + path + ":^)";
             
             fileCount += 1;
             
@@ -104,11 +122,11 @@
             
             if(tagCount > 0) { return; }
             
-            callback(unescape(tmp));
+            callback(safeText.restore(unescape(tmp)));
         }
         
         var predefines = { file: file };
-        var tmp = template;
+        var tmp = safeText.save(template);
         
         var matches = template.match(/\(:[\s\S]+?:\)/g);
         if(!matches || matches.length === 0) { fireCallback(); return; }
