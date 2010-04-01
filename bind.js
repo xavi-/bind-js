@@ -87,7 +87,7 @@
         var safe = {}, nextId = 0;
         
         function save(text) {
-            return text.replace(/(^:([\s\S]+?):^)/g, function(_, match) { 
+            return text.replace(/\(\^:([\s\S]+?):\^\)/g, function(_, match) { 
                 var id = "(^:" + (nextId++) + ":^)";
                 safe[id] = match;
                 return id;
@@ -95,7 +95,7 @@
         }
         
         function restore(text) {
-            return text.replace(/(^:\d+?:^)/g, function(id) { return safe[id]; });
+            return text.replace(/\(\^:\d+?:\^\)/g, function(id) { return safe[id]; });
         }
         
         return { save: save, restore: restore };
