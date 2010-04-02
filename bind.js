@@ -80,10 +80,6 @@
         fireCallback();
     }
     
-    function toFile(path, context, callback) {
-        retrieveFile(path, function(data) { bind.to(data, context, callback); });
-    };
-    
     var safeText = (function() {
         var safe = {}, nextId = 0;
         
@@ -102,6 +98,10 @@
         return { save: save, restore: restore, safe: safe };
     })();
     
+    function toFile(path, context, callback) {
+        retrieveFile(path, function(data) { bind.to(data, context, callback); });
+    }
+    
     function to(template, context, callback) {
         var fileCount = 0;
         
@@ -109,7 +109,7 @@
             var placeHolder = "(^:file:" + path + ":^)";
             
             fileCount += 1;
-            
+             
             bind.toFile(path, context, function(data) {
                 tmp = tmp.replace(placeHolder, data);
                 fileCount -= 1; fireCallback();
