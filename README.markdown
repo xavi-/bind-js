@@ -258,8 +258,10 @@ All paths are relative of the current working directory of the node process (aka
 
 The following character combinations must be escaped to appear correctly in a bound template:
 
-* original: `(: [: (: |: \:  :\ :| :) :] :)`
-* escaped: `(\: [\: {\: |\: \\:  :\\ :\| :\} :\] :\)`
+* original: `#: (: [: (: |: \:  :\ :| :) :] :) :#`
+* escaped: `#\: (\: [\: {\: |\: \\:  :\\ :\| :\} :\] :\) :\#`
+
+Also any text between `#:` and `:#` will automatically be escaped as well.  These delimiters cannot be nested.
 
 ## Developed by
 * Xavi Ramirez
