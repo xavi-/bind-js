@@ -99,7 +99,7 @@
             return txt.replace(/\(\^:\d+?:\^\)/g, function(id) { var rtn = safe[id]; delete safe[id]; return rtn; });
         }
         
-        return { save: save, restore: restore };
+        return { save: save, restore: restore, safe: safe };
     })();
     
     function to(template, context, callback) {
@@ -118,6 +118,19 @@
             return placeHolder;
         }
         
+        function unboundFile(path, context) {
+            var placeHolder = "(^:" + ((Math.random() * 50) >> 0) + ":^)";
+            
+            fileCount += 1;
+            
+            retrieveFile(path, function(data) {
+                safeText.safe[placeHolder] = data;
+                fileCount -= 1; fireCallback();
+            });
+            
+            return placeHolder;
+        }
+        
         function fireCallback() {
             if(fileCount > 0) { return; }
             
@@ -126,7 +139,7 @@
             callback(safeText.restore(unescape(tmp)));
         }
         
-        var predefines = { file: file };
+        var predefines = { "file": file, "file^": unboundFile };
         var tmp = safeText.save(template);
         
         var matches = template.match(/\(:[\s\S]+?:\)/g);
