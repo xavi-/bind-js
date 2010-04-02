@@ -39,7 +39,8 @@
                   .replace(/\[\\:/g, "[:").replace(/:\\]/g, ":]")
                   .replace(/\{\\:/g, "{:").replace(/:\\}/g, ":}")
                   .replace(/\|\\:/g, "|:").replace(/:\\\|/g, ":|")
-                  .replace(/\\\\:/g, "\\:").replace(/:\\\\/g, ":\\");
+                  .replace(/\\\\:/g, "\\:").replace(/:\\\\/g, ":\\")
+                  .replace(/\(\^\\:/g, "(^:").replace(/:\\\^\)/g, ":^)");
     }
     
     function cleanUp(val) { 
@@ -94,10 +95,8 @@
             });
         }
         
-        function restore(text) {
-            var rtn = text.replace(/\(\^:\d+?:\^\)/g, function(id) { return safe[id]; });
-            safe = {};
-            return rtn;
+        function restore(txt) {
+            return txt.replace(/\(\^:\d+?:\^\)/g, function(id) { var rtn = safe[id]; delete safe[id]; return rtn; });
         }
         
         return { save: save, restore: restore };
