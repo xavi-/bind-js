@@ -95,7 +95,9 @@
         }
         
         function restore(text) {
-            return text.replace(/\(\^:\d+?:\^\)/g, function(id) { return safe[id]; });
+            var rtn = text.replace(/\(\^:\d+?:\^\)/g, function(id) { return safe[id]; });
+            safe = {};
+            return rtn;
         }
         
         return { save: save, restore: restore };
