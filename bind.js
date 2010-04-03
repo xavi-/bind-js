@@ -1,6 +1,13 @@
 (function(bind, undefined) {
     var toString = Object.prototype.toString;
     
+    var log = (function() {
+        if(typeof console !== "undefined") { return function(text) { console.log(text); }; }
+        
+        var sys = require("sys");
+        return function(text) { sys.puts(text); };
+    })();
+    
     var retrieveFile, defaultRetrieveFile;
     retrieveFile = defaultRetrieveFile = (function() {
         if(typeof window !== "undefined") { // on client side
@@ -43,7 +50,7 @@
                   .replace(/\(\^\\:/g, "(^:").replace(/:\\\^\)/g, ":^)");
     }
     
-    function cleanUp(val) { 
+    function levelUp(val) { 
         return val.replace(/\[:/g, "(:").replace(/:]/g, ":)")
                   .replace(/\{:/g, "[:").replace(/:}/g, ":]")
                   .replace(/\|:/g, "{:").replace(/:\|/g, ":}")
@@ -65,14 +72,14 @@
         
         if(toString.call(val) === "[object Boolean]") { callback(val.toString()); return; }
         
-        defVal = cleanUp(defVal); 
+        defVal = levelUp(defVal); 
         if(toString.call(val) !== "[object Array]") { bind.to(defVal, val, callback); return; } // isObject
         
         var bindArray = new Array(val.length);
         var fireCallback = (function() {
             var count = val.length;
             
-            return function() { if(--count === 0) { callback(bindArray.join("")); } };
+            return function() { if(count-- === 0) { callback(bindArray.join("")); } };
         })();
         val.forEach(function(context, idx) {
             bind.to(defVal, context, function(data) { bindArray[idx] = data; fireCallback(); });
@@ -80,22 +87,32 @@
         fireCallback();
     }
     
-    var safeText = (function() {
-        var safe = {}, nextId = 0;
+    var snips = (function() {
+        var map = {};
         
-        function save(text) {
-            return text.replace(/\(\^:([\s\S]+?):\^\)/g, function(_, match) { 
-                var id = "(^:" + (nextId++) + ":^)";
-                safe[id] = match;
-                return id;
+        var nextId = (function(id) {
+            return function nextId() { return "(^:" + (id++)  + ":^)"; };
+        })(0);
+        
+        function create() {
+            var id = nextId();
+            return { id: id, callback: function(data) { map[id] = data; } };
+        }
+        
+        function add(data) { 
+            var id = nextId();
+            map[id] = data;
+            return id;
+        }
+                
+        function restore(txt) {
+            return txt.replace(/\(\^:\d+?:\^\)/g, function(id) {
+                var rtn = map[id]; delete map[id];
+                return restore(rtn); 
             });
         }
         
-        function restore(txt) {
-            return txt.replace(/\(\^:\d+?:\^\)/g, function(id) { var rtn = safe[id]; delete safe[id]; return rtn; });
-        }
-        
-        return { save: save, restore: restore, safe: safe };
+        return { create: create, add: add, restore: restore };
     })();
     
     function toFile(path, context, callback) {
@@ -106,29 +123,29 @@
         var fileCount = 0;
         
         function file(path, context) {
-            var placeHolder = "(^:file:" + path + ":^)";
+            var snip = snips.create();
             
             fileCount += 1;
-             
+            
             bind.toFile(path, context, function(data) {
-                tmp = tmp.replace(placeHolder, data);
+                snip.callback(data);
                 fileCount -= 1; fireCallback();
             });
             
-            return placeHolder;
+            return snip.id;
         }
         
         function unboundFile(path, context) {
-            var placeHolder = "(^:" + ((Math.random() * 50) >> 0) + ":^)";
+            var snip = snips.create();
             
             fileCount += 1;
             
             retrieveFile(path, function(data) {
-                safeText.safe[placeHolder] = data;
+                snip.callback(data);
                 fileCount -= 1; fireCallback();
             });
             
-            return placeHolder;
+            return snip.id;
         }
         
         function fireCallback() {
@@ -136,23 +153,31 @@
             
             if(tagCount > 0) { return; }
             
-            callback(safeText.restore(unescape(tmp)));
+            callback(snips.restore(unescape(tmp)));
         }
         
         var predefines = { "file": file, "file^": unboundFile };
-        var tmp = safeText.save(template);
+        // Removed and store escaped blocks
+        var tmp = template.replace(/\(\^:([\s\S]+?):\^\)/g, function(_, match) { return snips.add(match); });
         
-        var matches = template.match(/\(:[\s\S]+?:\)/g);
-        if(!matches || matches.length === 0) { fireCallback(); return; }
+        var tagCount = 0;
         
-        var tagCount = matches.length;
-        matches.forEach(function(tag) {            
-            binder(tag, context, predefines, function(data) {
-                tmp = tmp.replace(tag, data);
-                tagCount -= 1; fireCallback();
-            }); 
+        tmp = tmp.replace(/\(:[\s\S]+?:\)/g, function(tag) {
+            var snip = snips.create()
+            
+            tagCount += 1;
+            
+            setTimeout(function() {
+                binder(tag, context, predefines, function(data) {
+                    snip.callback(data);
+                    tagCount -= 1; fireCallback();
+                });
+            }, 0);
+            
+            return snip.id;
         });
-    };
+        fireCallback(); // Handle the case where no tags or files are found in the template
+    }
     
     bind.setFileRetriever = function(retriever) {
         retrieveFile = function() { return retriever.apply({ "default": defaultRetrieveFile }, arguments); }; 
