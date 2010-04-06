@@ -60,7 +60,7 @@
     function binder(tag, context, predefines, callback) {
         var split = tag.match(/\(:\s*(.+?)\s*~\s*([\s\S]+)\s*:\)/) || [];
         var key = split[1] || tag.match(/\(:\s*(.+?)\s*:\)/)[1], defVal = split[2] || "";
-        var val = context[key] || predefines[key];
+        var val = (context || {})[key] || predefines[key];
         
         if(val == undefined) { callback(defVal); return; }
         
@@ -81,9 +81,11 @@
             
             return function() { if(count-- === 0) { callback(bindArray.join("")); } };
         })();
-        val.forEach(function(context, idx) {
-            bind.to(defVal, context, function(data) { bindArray[idx] = data; fireCallback(); });
-        });
+        for(var i = 0; i < val.length; i++) {
+            bind.to(defVal, val[i], (function(i) { 
+                return function(data) { bindArray[i] = data; fireCallback(); };
+            })(i));
+        }
         fireCallback();
     }
     
