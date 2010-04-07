@@ -74,7 +74,7 @@ One of bind's core goals is to eliminate all conditional logic from templates.  
     bind.toFile("./file.html", { square: function(val) { return val * val; } },
                 function callback(data) { /* data === "<span>Two squared is 4</span>" */ });
 
-Note that the default value is passed as the first parameter to the bound function and that `.toString` is called on the result.
+Note that the default value is passed as the first parameter to the bound function and that `.toString` is called on the result.  Also, the context is passed to the bind function as the second parameter.
 
 ### Bind Objects
 ####The Markup:
