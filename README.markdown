@@ -262,7 +262,7 @@ The following character combinations must be escaped to appear correctly in a bo
 * original: `(^: (: [: (: |: \:  :\ :| :) :] :) :^)`
 * escaped: `(^\: (\: [\: {\: |\: \\:  :\\ :\| :\} :\] :\) :\^)`
 
-Also any text between `(^:` and `:^)` will automatically be escaped as well.  These delimiters cannot be nested.
+Any text between `(^:` and `:^)` will automatically be escaped as well.  These delimiters cannot be nested.
 
 ## Developed by
 * Xavi Ramirez
