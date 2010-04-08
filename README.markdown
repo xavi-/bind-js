@@ -54,6 +54,7 @@ From there bind differs a bit.  For example, default values are supported:
     bind.toFile("./file.html", {},
                 function callback(data) { /* data === "<h1>Hello, Anonymous</h1>" */ });
 
+If the binding property (in this case `user`) is not found in the context object (the second parameter), then the default value is used.  Also noted that if `null` or `undefined` is passed in as the context, then an empty string is immediately returned.
 
 ### Bind Functions
 One of bind's core goals is to eliminate all conditional logic from templates.  To remain expressive bind supports binding to functions.
