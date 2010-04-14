@@ -1,0 +1,139 @@
+<html>
+<head></head>
+<body>
+<span>(:no-default-worked?:)</span>
+<br/>
+<span>(:default-worked? ~ default value worked:)</span>
+<br/>
+<span>(:function-worked? ~ default value worked:)</span>
+<br/>
+<span>(:number-worked?:)</span>
+<br/>
+<span>(:boolean-worked?:)</span>
+<br/>
+<span>escape test: (^\: (\: [\: {\: |\: \\:  :\\ :\| :\} :\] :\) :\^)</span>
+<br/>
+<span>Two squared is (:square ~ 2:)</span>
+<br/>
+<span>Test Zero Val: (:zero-val:)</span>
+<h2>Array Test</h2>
+<div>(:blog-entry ~
+    <h3>[:blog-title:]</h3>
+    <span>[:publish-date:]</span>
+:)
+</div>
+<h2>Object test</h2>
+(: page-info ~
+    <ul>
+        <li>Date: [:date:]</li>
+        <li>Name: [:my-name ~ Who knows:]</li>
+        <li>Page: [:page-number:]</li>
+        <li>PWD: [:file ~ ./pwd.txt:]</li>
+    </ul>
+:)
+<h2>Embedded File</h2>
+<h3>Test embedding an unbound file:</h3>
+(:file^ ~ ./pwd.txt :)
+<pre>
+(:file^ ~ ./something.js :)
+</pre>
+<h2>Super Nested</h2>
+<table>
+    <tr><th colspan=2>(:month-name:)</th></tr>
+    (: weeks ~
+    <tr>
+        <th>[:week-name:]</th>
+        [: days ~
+        <td> 
+            <span class="day">{:day:}</span> - <span class="date">{:date:}</span>
+            <ol>{: events ~
+                <li class="|:event-type:|" colspan=|:days:|>
+                    <h3>|:event-name:|</h3>
+                    <h4>The Guests:</h4>
+                    <ul>
+                        |:guest-list ~ <li>\:name:\</li>:|
+                    </ul>
+                </li>:}
+            </ol>
+        </td>:]
+    </tr>:)
+</table>
+<h2>Undefines in Lists</h2>
+seven things: 
+<ul>
+    (:list ~ <li>[:name ~ no-name :]</li> :)
+</ul>
+
+<h2>Client Side Test</h2>
+
+<div id="simple-results"></div>
+<script id="simple-test-template" type="text/html">
+(^:
+    (: page-info ~
+        <ul>
+            <li>Date: [:date:]</li>
+            <li>Name: [:my-name ~ Who knows:]</li>
+            <li>Page: [:page-number:]</li>
+        </ul>
+    :)
+:^)
+</script>
+
+<div id="results"></div>
+<script id="test-template" type="text/html">
+(^:
+    <h2>(:month-name:)</h2>
+    <table>
+    (: weeks ~
+        <tr>
+        [: days ~ <th><span class="day">{:day:}</span> - <span class="date">{:date:}</span></th> :]
+        </tr>
+        [: tracks ~ 
+            <tr>
+                {: events ~
+                    <td class="|:event-type:|" colspan=|:length:|>|:event-name:|</td>
+                :}
+            </tr>
+        :]
+    :)
+    </table>
+:^)
+</script>
+<script src="bind.js" type="text/javascript"></script>
+<script type="text/javascript">
+var months = [ "January", "February", "March", "April", "May", "June", 
+               "July", "August", "September", "October", "November", "December" ];
+var days = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
+
+var data = { "month-name": months[3],
+             "weeks": [ { "days": [ { "day": days[0], "date": 1 }, 
+                                    { "day": days[1], "date": 2 }, 
+                                    { "day": days[2], "date": 3 }, 
+                                    { "day": days[3], "date": 4 }, 
+                                    { "day": days[4], "date": 5 }, 
+                                    { "day": days[5], "date": 6 }, 
+                                    { "day": days[6], "date": 7 } ],
+                          "tracks": [ { "events": [ { "event-type": "sock-hop", 
+                                                      "length": 4, 
+                                                      "event-name": "Sock Hop" },
+                                                    { "event-type": "hip-hop", 
+                                                      "length": 3, 
+                                                      "event-name": "Hip Hop" } ] } ] } ] };
+
+
+
+var data0 = { "page-info": { date: function() { return (new Date()).toString(); },
+                             "my-name": "Xavi Ramirez",
+                             "page-number": 4 } };
+var template = document.getElementById("simple-test-template").innerHTML;
+bind.to(template, data0, function(html) {
+    document.getElementById("simple-results").innerHTML = html;
+});
+
+var template = document.getElementById("test-template").innerHTML;
+bind.to(template, data, function(html) {
+    document.getElementById("results").innerHTML = html;
+});
+</script>
+</body>
+</html>
