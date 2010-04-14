@@ -58,7 +58,7 @@
     }
     
     function binder(tag, context, predefines, callback) {
-        if(context == null) { callback(""); return; }
+        if(context == undefined) { callback(""); return; }
         
         var split = tag.match(/\(:\s*(.+?)\s*~\s*([\s\S]+?)\s*:\)/) || [];
         var key = split[1] || tag.match(/\(:\s*(.+?)\s*:\)/)[1], defVal = split[2] || "";
