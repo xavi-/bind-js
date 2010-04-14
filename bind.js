@@ -62,7 +62,8 @@
         
         var split = tag.match(/\(:\s*(.+?)\s*~\s*([\s\S]+?)\s*:\)/) || [];
         var key = split[1] || tag.match(/\(:\s*(.+?)\s*:\)/)[1], defVal = split[2] || "";
-        var val = context[key] || predefines[key];
+        var val = context[key];
+        if(val == undefined) { val = predefines[key]; }
         
         if(val == undefined) { callback(defVal); return; }
         
