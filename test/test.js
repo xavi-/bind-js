@@ -3,11 +3,11 @@ var http = require('http');
 var repl = require("repl");
 var url = require("url");
 var fs = require("fs");
-var bind = require("../bind");
+var bind = require("../"); // Bind library
    
 http.createServer(function (req, res) {
     if(url.parse(req.url).pathname === "/bind.js") {
-        fs.readFile("../bind.js", function(err, data) {
+        fs.readFile("../index.js", function(err, data) {
             if(err) { throw err; };
             
             res.sendHeader(200, { "Conent-Length": data.length,
