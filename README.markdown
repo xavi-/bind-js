@@ -14,7 +14,7 @@ Currently works with node.js v0.1.33
     
 ## The API
 
-- __`bind.to(template, context, callback)`__: the `callback` is called with the results of binding the `template` and `context`.  See examples below from more details.
+- __`bind.to(template, context, callback)`__: the `callback` is called with the results of binding the `template` to the `context`.  See examples below from more details.
 
 - __`bind.toFile(path, context, callback)`__: the file content of `path` are loaded with the file retriever (see the `bind.setFileRetriever` for more details) and passed to `bind.to` as the `template`.
 
@@ -259,7 +259,7 @@ All paths are relative of the current working directory of the node process (aka
 
 The following character combinations must be escaped to appear correctly in a bound template:
 
-* original: `(^: (: [: (: |: \:  :\ :| :) :] :) :^)`
+* original: `(^: (: [: {: |: \:  :\ :| :} :] :) :^)`
 * escaped: `(^\: (\: [\: {\: |\: \\:  :\\ :\| :\} :\] :\) :\^)`
 
 Any text between `(^:` and `:^)` will automatically be escaped as well.  These delimiters cannot be nested.
