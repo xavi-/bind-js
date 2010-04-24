@@ -2,7 +2,7 @@
 
 A simple templating engine for node.js that smiles back.  It's influenced by mustache and the lift templating engine.
 
-Currently works with node.js v0.1.33
+Currently works with node.js v0.1.92
 
 ## Goals
 * Works on both the server and client side
@@ -35,7 +35,7 @@ To use bind on the client side, simply add the following `script` to your page:
 Once executed an object called `window.bind` is created.  This object contains all the functionality of bind on the server side.  The only difference is that on the client side, bind uses an `XHR` request to retrieve the contents of an embedded file instead of `require("fs").readFile`. Note that this functionality can be overwritten with `bind.setFileRetrieve`.
 
 ## Examples
-In the simplest case it looks likes mustache
+In the simplest case bind looks a lot like mustache
 
 ####The Markup:
     <h1>Hello, (:user:)</h1>
@@ -57,7 +57,7 @@ From there bind differs a bit.  For example, default values are supported:
 If the binding property (in this case `user`) is not found in the context object (the second parameter), then the default value is used.  Also noted that if `null` or `undefined` is passed in as the context, then an empty string is immediately returned.
 
 ### Bind Functions
-One of bind's core goals is to eliminate all conditional logic from templates.  To remain expressive bind supports binding to functions.
+One of bind's core goals is to eliminate all conditional logic from templates, but to remain expressive bind supports binding to functions.
 
 ####The Markup:
     <span>The time: (:time:)</span>
