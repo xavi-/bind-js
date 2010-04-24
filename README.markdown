@@ -130,6 +130,21 @@ Note that the default value is passed as the first parameter to the bound functi
 
 All paths are relative of the current working directory of the node process (aka `process.cwd()`) or the current path (aka `window.location`).
 
+By default the content of the embeded file is bound and escaped.  To simply embed the unescaped contents of a file, us `file^` instead.
+
+####The Markup:
+    <div>(:file ~ ./status-template.html:)</div>
+    <script id="status-template">
+        (:file^ ~ ./status-template.html:)
+    </script>
+####The Code:
+    var bind = require("bind");
+
+    bind.toFile("./file.html", { "user-img": "fred.jpg", status: "Rockin' hard..." }, 
+                function callback(data) { /* data === <div>...unescaped file contents...</div> */ });
+
+This is useful when you want to reuse a template on the client side and on the server while rendering the page.
+
 ### Deeply Nested Templates
 ####The Markup:
     <table>
