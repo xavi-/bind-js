@@ -130,7 +130,7 @@ Note that the default value is passed as the first parameter to the bound functi
 
 All paths are relative of the current working directory of the node process (aka `process.cwd()`) or the current path (aka `window.location`).
 
-By default the content of the embeded file is bound and escaped.  To simply embed the unescaped contents of a file, use `file^` instead.
+By default the content of the embedded file is bound and escaped.  To simply embed the unescaped contents of a file, use `file^` instead.
 
 ####The Markup:
     <div>(:file ~ ./status-template.html:)</div>
