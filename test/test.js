@@ -10,8 +10,8 @@ http.createServer(function (req, res) {
         fs.readFile("../index.js", function(err, data) {
             if(err) { throw err; };
             
-            res.writeHeader(200, { "Conent-Length": data.length,
-                                   "Content-Type": "application/x-javascript" });
+            res.writeHead(200, { "Conent-Length": data.length,
+                                 "Content-Type": "application/x-javascript" });
             res.end(data, "utf8");
         });
         
@@ -64,8 +64,8 @@ http.createServer(function (req, res) {
                                                        "guest-list": [ { "name": "Alice" }, 
                                                                        { "name": "Eliza" } ] } } ] } ] },
                 function(data) {
-                    res.writeHeader(200, { "Content-Length": data.length,
-                                           "Content-Type": "text/html" });
+                    res.writeHead(200, { "Content-Length": data.length,
+                                         "Content-Type": "text/html" });
                     res.end(data, "utf8");
                 });
 }).listen(8000);

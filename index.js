@@ -111,7 +111,7 @@
         }
                 
         function restore(txt) {
-            return txt.replace(/\(\^:\d+?:\^\)/g, function(id) {
+            return txt.toString().replace(/\(\^:\d+?:\^\)/g, function(id) {
                 var rtn = map[id]; delete map[id];
                 return restore(rtn); 
             });
