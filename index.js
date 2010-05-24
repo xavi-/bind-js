@@ -125,6 +125,8 @@
     }
     
     function to(template, context, callback) {
+        template = template.toString(); // This makes bind-js compatibile with node.js buffers
+        
         var fileCount = 0;
         
         function file(path, context) {
