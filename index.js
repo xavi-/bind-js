@@ -66,7 +66,7 @@
         
         if(val === null) { callback(""); return; }
         
-        val = val || predefines[key];
+        if(val == undefined) { val = predefines[key]; }
         if(val == undefined) { callback(defVal); return; }
         
         if(toString.call(val) === "[object String]") { callback(val); return; }
