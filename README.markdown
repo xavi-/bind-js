@@ -269,7 +269,23 @@ This is useful when you want to reuse a template on the client side and on the s
                         </tr>
                     </table>" */
     });
-    
+
+## Fine points
+
+### `null` vs `undefined`
+
+In order to allow for the fine control of mark up bind makes a distinction of `null` and `undefined`.  Matches against `null` result in an empty string, while a match against `undefined` outputs the default value.
+
+####The Markup:
+    <div>(:foo ~ bar:)</div>
+    <div>(:wee ~ poo:)</div>
+####The Code:
+    var bind = require("bind");
+
+    bind.toFile("./file.html", { foo: null }, 
+                function callback(data) { /* data === <div></div>
+                                                      <div>poo</div> */ });
+
 ## Escaped characters
 
 The following character combinations must be escaped to appear correctly in a bound template:

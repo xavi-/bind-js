@@ -65,6 +65,7 @@
         var val = context[key];
         if(val == undefined) { val = predefines[key]; }
         
+        if(val === null) { callback(""); return; }
         if(val == undefined) { callback(defVal); return; }
         
         if(toString.call(val) === "[object String]") { callback(val); return; }
