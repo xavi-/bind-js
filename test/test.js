@@ -35,6 +35,7 @@ http.createServer(function (req, res) {
                                   { "blog-title": "The Moon Glows", "publish-date": "Jan 19, 1984" },
                                   { "blog-title": "Happy V-Day", "publish-date": "Feb 14, 1984" } ],
                   "list": a,
+                  "foo": null,
                   "month-name": "March",
                   "weeks": [ { "week-name": "week one",
                                "days": [ { "day": "Monday",
