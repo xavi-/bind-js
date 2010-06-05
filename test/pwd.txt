@@ -1,1 +1,3 @@
 my password..., <span>escape test: (^\: (\: [\: {\: |\: \\:  :\\ :\| :\} :\] :\) :\^)</span>
+
+(: #:second:# ~ this is text coming from a file to an anchor point :)

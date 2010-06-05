@@ -61,12 +61,14 @@
         if(context == undefined) { callback(""); return; }
         
         var split = tag.match(/\(:\s*(.+?)\s*~\s*([\s\S]+?)\s*:\)/) || [];
-        var key = split[1] || tag.match(/\(:\s*(.+?)\s*:\)/)[1], defVal = split[2] || "";
+        var key = split[1] || tag.match(/\(:\s*(.+?)\s*:\)/)[1];
+        var defVal = split[2] || "";
         var val = context[key];
         
         if(val === null) { callback(""); return; }
         
         if(val == undefined) { val = predefines[key]; }
+        if(anchors.isAnchor(key)) { anchors.append(key, defVal); callback(""); return; }
         if(val == undefined) { callback(defVal); return; }
         
         if(toString.call(val) === "[object String]") { callback(val); return; }
@@ -123,6 +125,28 @@
         return { create: create, add: add, restore: restore };
     })();
     
+    var anchors = (function() {
+        var anchors = {};
+        
+        function isAnchor(id) {
+            return toString.call(id) === "[object String]" && /#:.+?:#/.test(id);
+        }
+        
+        function append(id, data) {
+            anchors[id] = (anchors[id] || "") + data;
+        }
+        
+        function restore(txt) {
+            return txt.toString().replace(/#:.+?:#/g, function(id) {
+                var rtn = anchors[id] || "";
+                delete anchors[id];
+                return restore(rtn);
+            });
+        };
+        
+        return { restore: restore, append: append, isAnchor: isAnchor };
+    })();
+    
     function toFile(path, context, callback) {
         retrieveFile(path, function(data) { bind.to(data, context, callback); });
     }
@@ -163,7 +187,7 @@
             
             if(tagCount > 0) { return; }
             
-            callback(snips.restore(unescape(tmp)));
+            callback(snips.restore(unescape(anchors.restore(tmp))));
         }
         
         var predefines = { "file": file, "file^": unboundFile };

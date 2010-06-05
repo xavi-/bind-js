@@ -20,7 +20,7 @@ http.createServer(function (req, res) {
     var a = new Array(7);
     for(var i = 0; i < 3; i++) { a[i] = {}; }
     a[3] = { name: "hello" };
-    
+    sys.puts("\n\nservering page....");
     bind.toFile("./test.html",
                 { "no-default-worked?": "yes it worked", 
                   "function-worked?":  function(def) { return "it worked: " + def; },
