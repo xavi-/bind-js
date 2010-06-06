@@ -64,7 +64,7 @@ One of bind's core goals is to eliminate all conditional logic from templates, b
 ####The Code:
     var bind = require("bind");
 
-    bind.toFile("./file.html", { time: function() { return new Date().toString(); } },
+    bind.toFile("./file.html", { time: function(callback) { callback(new Date()); } },
                 function callback(data) { /* data === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
 
 ####The Markup:
@@ -72,10 +72,10 @@ One of bind's core goals is to eliminate all conditional logic from templates, b
 ####The Code:
     var bind = require("bind");
 
-    bind.toFile("./file.html", { square: function(val) { return val * val; } },
+    bind.toFile("./file.html", { square: function(callback, val) { callback(val * val); } },
                 function callback(data) { /* data === "<span>Two squared is 4</span>" */ });
 
-Note that the default value is passed as the first parameter to the bound function and that `.toString` is called on the result.  Also, the context is passed to the bind function as the second parameter.
+To help parallel the asynchronous nature of node.js, bound functions _must_ use the `callback` parameter to return data.  Note that the default value is passed as the second parameter and that `.toString` is called on the value passed to `callback`.  Also, the context is passed to the bind function as the third parameter.
 
 ### Bind Objects
 ####The Markup:

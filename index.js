@@ -78,7 +78,13 @@
         defVal = levelUp(defVal);
         if(toString.call(val) === "[object String]") { bind.to(val, context, callback); return; }
         
-        if(toString.call(val) === "[object Function]") { bind.to(val(defVal, context), context, callback); return; }
+        if(toString.call(val) === "[object Function]") {
+            val(function(data, newContext, noBind) {
+                if(noBind) { callback(data.toString()); }
+                else { bind.to(data.toString(), newContext || context, callback); }
+            }, defVal, context);
+            return;
+        }
         
         if(toString.call(val) !== "[object Array]") { bind.to(defVal, val, callback); return; } // isObject
         
@@ -150,6 +156,15 @@
         return { restore: restore, append: append, isAnchor: isAnchor };
     })();
     
+    var predefines = {
+        "file": function file(callback, path, context) {
+            retrieveFile(path, function(data) { callback(data, context); });
+        },
+        "file^": function unboundFile(callback, path, context) {
+            retrieveFile(path, function(data) { callback(data, context, true); });
+        } 
+    };
+    
     function toFile(path, context, callback) {
         retrieveFile(path, function(data) { bind.to(data, context, callback); });
     }
@@ -157,48 +172,16 @@
     function to(template, context, callback) {
         template = template.toString(); // This makes bind-js compatibile with node.js buffers
         
-        var fileCount = 0;
-        
-        function file(path, context) {
-            var snip = snips.create();
-            
-            fileCount += 1;
-            
-            bind.toFile(path, context, function(data) {
-                snip.callback(data);
-                fileCount -= 1; fireCallback();
-            });
-            
-            return snip.id;
-        }
-        
-        function unboundFile(path, context) {
-            var snip = snips.create();
-            
-            fileCount += 1;
-            
-            retrieveFile(path, function(data) {
-                snip.callback(data);
-                fileCount -= 1; fireCallback();
-            });
-            
-            return snip.id;
-        }
-        
         function fireCallback() {
-            if(fileCount > 0) { return; }
-            
             if(tagCount > 0) { return; }
             
             callback(snips.restore(unescape(anchors.restore(tmp))));
         }
         
-        var predefines = { "file": file, "file^": unboundFile };
         // Removed and store escaped blocks
         var tmp = template.replace(/\(\^:([\s\S]+?):\^\)/g, function(_, match) { return snips.add(match); });
         
-        var tagCount = 0;
-        
+        var tagCount = 0;    
         tmp = tmp.replace(/\(:[\s\S]+?:\)/g, function(tag) {
             var snip = snips.create()
             
