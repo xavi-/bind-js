@@ -71,15 +71,15 @@
         if(anchors.isAnchor(key)) { anchors.append(key, defVal); callback(""); return; }
         if(val == undefined) { callback(defVal); return; }
         
-        if(toString.call(val) === "[object String]") { callback(val); return; }
-        
-        if(toString.call(val) === "[object Function]") { callback(val(defVal, context).toString()); return; }
-        
         if(toString.call(val) === "[object Number]") { callback(val.toString()); return; }
         
         if(toString.call(val) === "[object Boolean]") { callback(val.toString()); return; }
         
-        defVal = levelUp(defVal); 
+        defVal = levelUp(defVal);
+        if(toString.call(val) === "[object String]") { bind.to(val, context, callback); return; }
+        
+        if(toString.call(val) === "[object Function]") { bind.to(val(defVal, context), context, callback); return; }
+        
         if(toString.call(val) !== "[object Array]") { bind.to(defVal, val, callback); return; } // isObject
         
         var bindArray = new Array(val.length);
@@ -100,7 +100,7 @@
         var map = {};
         
         var nextId = (function(id) {
-            return function nextId() { return "(^:" + (id++)  + ":^)"; };
+            return function nextId() { return "$?:" + (id++)  + ":?$"; };
         })(0);
         
         function create() {
@@ -113,10 +113,13 @@
             map[id] = data;
             return id;
         }
-                
+        
         function restore(txt) {
-            return txt.toString().replace(/\(\^:\d+?:\^\)/g, function(id) {
+            return txt.toString().replace(/\$\?:\d+?:\?\$/g, function(id) {
                 var rtn = map[id];
+                
+                if(rtn === undefined) { return id; }
+                
                 delete map[id];
                 return restore(rtn); 
             });
