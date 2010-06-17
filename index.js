@@ -54,7 +54,7 @@
         return val.replace(/\[:/g, "(:").replace(/:]/g, ":)")
                   .replace(/\{:/g, "[:").replace(/:}/g, ":]")
                   .replace(/\|:/g, "{:").replace(/:\|/g, ":}")
-                  .replace(/\\:/g, "|:").replace(/:\\/g, ":|");
+                  .replace(/[^\^({[|\\]\\:/g, "|:").replace(/:\\[^\\|\]})\^]/g, ":|");
     }
     
     function binder(tag, context, predefines, callback) {
@@ -175,7 +175,7 @@
         function fireCallback() {
             if(tagCount > 0) { return; }
             
-            callback(snips.restore(unescape(anchors.restore(tmp))));
+            callback(unescape(snips.restore(anchors.restore(tmp))));
         }
         
         // Removed and store escaped blocks

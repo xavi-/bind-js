@@ -28,6 +28,7 @@ http.createServer(function (req, res) {
                   "boolean-worked?": true,
                   "square": function(callback, val) { callback(val * val); },
                   "zero-val": 0,
+                  "noop": function(callback, val) { callback(val); },
                   "page-info": { date: function(callback) { callback(new Date()); },
                                  "my-name": "Xavi Ramirez",
                                  "page-number": 4 },
