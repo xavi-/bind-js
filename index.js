@@ -75,7 +75,6 @@
         
         if(toString.call(val) === "[object Boolean]") { callback(val.toString()); return; }
         
-        defVal = levelUp(defVal);
         if(toString.call(val) === "[object String]") { bind.to(val, context, callback); return; }
         
         if(toString.call(val) === "[object Function]") {
@@ -86,6 +85,7 @@
             return;
         }
         
+        defVal = levelUp(defVal);
         if(toString.call(val) !== "[object Array]") { bind.to(defVal, val, callback); return; } // isObject
         
         var bindArray = new Array(val.length);
