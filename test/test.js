@@ -1,4 +1,3 @@
-var sys = require('sys');
 var http = require('http');
 var repl = require("repl");
 var url = require("url");
@@ -20,7 +19,7 @@ http.createServer(function (req, res) {
     var a = new Array(7);
     for(var i = 0; i < 3; i++) { a[i] = {}; }
     a[3] = { name: "hello" };
-    sys.puts("\n\nservering page....");
+    console.log("\n\nservering page....");
     bind.toFile("./test.html",
                 { "no-default-worked?": "yes it worked", 
                   "function-worked?":  function(callback, def) { callback("it worked: " + def); },
@@ -72,6 +71,6 @@ http.createServer(function (req, res) {
                     res.end(data, "utf8");
                 });
 }).listen(8000);
-sys.puts('Server running at http://127.0.0.1:8000/');
+console.log('Server running at http://127.0.0.1:8000/');
 //repl.start("server> ");
 

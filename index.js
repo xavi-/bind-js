@@ -4,8 +4,7 @@
     var log = (function() {
         if(typeof console !== "undefined") { return function(text) { console.log(text); }; }
         
-        var sys = require("sys");
-        return function(text) { sys.puts(text); };
+        return function(text) { };
     })();
     
     var retrieveFile, defaultRetrieveFile;
