@@ -2,7 +2,7 @@
 
 A simple templating engine for node.js that smiles back.  It's influenced by mustache and the lift templating engine.
 
-Currently works with node.js v0.1.96
+Currently works with node.js v0.3.7
 
 ## Goals
 * Works on both the server and client side
@@ -11,7 +11,7 @@ Currently works with node.js v0.1.96
 * Easy to debug
 * Asynchronous
 * Fast
-    
+
 ## The API
 
 - __`bind.to(template, context, callback)`__: the `callback` is called with the results of binding the `template` to the `context`.  See examples below from more details.
