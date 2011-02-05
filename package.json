@@ -1,0 +1,16 @@
+{ "name": "bind"
+, "version": "0.1.0"
+, "description": "A simple templating engine that smiles back"
+, "keywords": [ "template", "engine", "bind" ]
+, "maintainers":
+  [ { "name": "Xavi"
+    , "email": "xavi.rmz@gmail.com"
+    , "web": "http://xavi.co"
+    }
+  ]
+, "main": "./index.js"
+, "repository":
+  { "type": "git"
+  , "url": "git://github.com/xavi-/bind-js.git"
+  }
+}
