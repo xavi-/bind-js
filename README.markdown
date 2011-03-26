@@ -301,7 +301,7 @@ The easiest way to get bind is with [npm](http://npmjs.org/):
 
     npm install bind
 
-Alternatively you can also clone this git repository:
+Alternatively you can clone this git repository:
 
     git clone git://github.com/Xavi-/bind-js.git
 
