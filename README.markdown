@@ -1,8 +1,8 @@
 # BindJS
 
-A simple templating engine for node.js that smiles back.  It's influenced by mustache and the lift templating engine.
+A simple templating engine for node.js that smiles back.  It's influenced by mustache and the [lift](http://liftweb.net/) [templating engine](http://www.assembla.com/wiki/show/liftweb/View_First).
 
-Currently works with node.js v0.3.7
+Currently works with node.js v0.1.30 and above
 
 ## Goals
 * Works on both the server and client side
@@ -294,6 +294,16 @@ The following character combinations must be escaped to appear correctly in a bo
 * escaped: `(^\: (\: [\: {\: |\: \\:  :\\ :\| :\} :\] :\) :\^)`
 
 Any text between `(^:` and `:^)` will automatically be escaped as well.  These delimiters cannot be nested.
+
+## Getting Bind
+
+The easiest way to get bind is with [npm](http://npmjs.org/):
+
+    npm install bind
+
+Alternatively you can also clone this git repository:
+
+    git clone git://github.com/Xavi-/bind-js.git
 
 ## Developed by
 * Xavi Ramirez
