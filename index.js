@@ -72,8 +72,6 @@
         
         if(toString.call(val) === "[object Number]") { callback(val.toString()); return; }
         
-        if(toString.call(val) === "[object Boolean]") { callback(val.toString()); return; }
-        
         if(toString.call(val) === "[object String]") { bind.to(val, context, callback); return; }
         
         if(toString.call(val) === "[object Function]") {
@@ -85,6 +83,11 @@
         }
         
         defVal = levelUp(defVal);
+        if(toString.call(val) === "[object Boolean]") {
+            if(val) { bind.to(defVal, context, callback); } else { callback(""); }
+            return;
+        }
+        
         if(toString.call(val) !== "[object Array]") { bind.to(defVal, val, callback); return; } // isObject
         
         var bindArray = new Array(val.length);

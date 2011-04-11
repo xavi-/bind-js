@@ -75,7 +75,19 @@ One of bind's core goals is to eliminate all conditional logic from templates, b
     bind.toFile("./file.html", { square: function(callback, val) { callback(val * val); } },
                 function callback(data) { /* data === "<span>Two squared is 4</span>" */ });
 
-To help parallel the asynchronous nature of node.js, bound functions _must_ use the `callback` parameter to return data.  Note that the default value is passed as the second parameter and that the bind context is passed in as the third parameter.  Also, keep in mind that `.toString` is invoked on the value passed to `callback`.
+To parallel the asynchronous nature of node.js, bound functions _must_ use the `callback` parameter to return data.  Note that the default value is passed as the second parameter and that the bind context is passed in as the third parameter.  Also, keep in mind that `.toString` is invoked on the value passed to `callback`.
+
+
+### Bind Booleans
+####The Markup:
+    (: signed-in? ~ Welcome back [: user-name :] :)
+####The Code
+    var bind = require("bind");
+
+    bind.toFile("./file.html", { "signed-in?": false }, function callback(data) { /* data === "" */ });
+    
+    bind.toFile("./file.html", { "signed-in?": true, "user-name": Lisa },
+                function callback(data) { /* data === "Welcome back Lisa" */ });
 
 ### Bind Objects
 ####The Markup:
