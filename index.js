@@ -1,6 +1,14 @@
 (function(bind, undefined) {
     var toString = Object.prototype.toString;
     
+    var nextTick = (function() {
+        if(typeof process !== "undefined") {
+            return function(fn) { process.nextTick(fn); };
+        } else {
+            return function(fn) { setTimeout(fn, 0); }
+        }
+    })();
+    
     var log = (function() {
         if(typeof console !== "undefined") { return function(text) { console.log(text); }; }
         
@@ -189,12 +197,12 @@
             
             tagCount += 1;
             
-            setTimeout(function() {
+            nextTick(function() {
                 binder(tag, context, predefines, function(data) {
                     snip.callback(data);
                     tagCount -= 1; fireCallback();
                 });
-            }, 0);
+            });
             
             return snip.id;
         });
