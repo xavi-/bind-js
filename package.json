@@ -1,5 +1,5 @@
 { "name": "bind"
-, "version": "0.1.0"
+, "version": "0.1.1"
 , "description": "A simple templating engine that smiles back"
 , "keywords": [ "template", "engine", "bind" ]
 , "maintainers":
