@@ -65,7 +65,7 @@ One of bind's core goals is to eliminate all conditional logic from templates, b
     var bind = require("bind");
 
     bind.toFile("./file.html", { time: function(callback) { callback(new Date()); } },
-                function callback(data) { /* data === "<h1>Hello, Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</h1>" */ });
+                function callback(data) { /* data === "<span>The time: Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</span>" */ });
 
 ####The Markup:
     <span>Two squared is (:square ~ 2:)</span>
@@ -86,7 +86,7 @@ To parallel the asynchronous nature of node.js, bound functions _must_ use the `
 
     bind.toFile("./file.html", { "signed-in?": false }, function callback(data) { /* data === "" */ });
     
-    bind.toFile("./file.html", { "signed-in?": true, "user-name": Lisa },
+    bind.toFile("./file.html", { "signed-in?": true, "user-name": "Lisa" },
                 function callback(data) { /* data === "Welcome back Lisa" */ });
 
 ### Bind Objects
