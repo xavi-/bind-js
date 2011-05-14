@@ -53,7 +53,7 @@
                   .replace(/\[\\:/g, "[:").replace(/:\\]/g, ":]")
                   .replace(/\{\\:/g, "{:").replace(/:\\}/g, ":}")
                   .replace(/\|\\:/g, "|:").replace(/:\\\|/g, ":|")
-                  .replace(/\\\\:/g, "\\:").replace(/:\\\\/g, ":\\")
+                  .replace(/\/\\:/g, "\\:").replace(/:\/\\/g, ":\\")
                   .replace(/\(\^\\:/g, "(^:").replace(/:\\\^\)/g, ":^)");
     }
     
@@ -61,7 +61,7 @@
         return val.replace(/\[:/g, "(:").replace(/:]/g, ":)")
                   .replace(/\{:/g, "[:").replace(/:}/g, ":]")
                   .replace(/\|:/g, "{:").replace(/:\|/g, ":}")
-                  .replace(/[^\^({[|\\]\\:/g, "|:").replace(/:\\[^\\|\]})\^]/g, ":|");
+                  .replace(/\/:/g, "|:").replace(/:\//g, ":|");
     }
     
     function binder(tag, context, predefines, callback) {

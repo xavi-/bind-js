@@ -172,7 +172,7 @@ This is useful when you want to reuse a template on the client side and on the s
                         <h3>|:event-name:|</h3>
                         <h4>The Guests:</h4>
                         <ul>
-                            |:guest-list ~ <li>\:name:\</li>:|
+                            |:guest-list ~ <li>/:name:/</li>:|
                         </ul>
                     </li>:}
                 </ol>
@@ -302,8 +302,8 @@ In order to allow for the fine control of mark up bind makes a distinction of `n
 
 The following character combinations must be escaped to appear correctly in a bound template:
 
-* original: `(^: (: [: {: |: \:  :\ :| :} :] :) :^)`
-* escaped: `(^\: (\: [\: {\: |\: \\:  :\\ :\| :\} :\] :\) :\^)`
+* original: `(^: (: [: {: |: /:  :/ :| :} :] :) :^)`
+* escaped: `(^\: (\: [\: {\: |\: /\:  :\/ :\| :\} :\] :\) :\^)`
 
 Any text between `(^:` and `:^)` will automatically be escaped as well.  These delimiters cannot be nested.
 
