@@ -161,6 +161,19 @@ bind.to(
     function callback(data) { assert.equal(data, "<div></div><div>poo</div>"); }
 );
 
+
+bind.to(
+    "<div>(: if[signed-in] ~ [: then ~ Welcome user :][: else ~ sign in here :]:)</div>",
+    { "signed-in": true },
+    function callback(data) { assert.equal(data, "<div>Welcome user</div>"); }
+);
+
+bind.to(
+    "<div>(: if[signed-in] ~ [: then ~ Welcome user :][: else ~ sign in here :]:)</div>",
+    { "signed-in": false },
+    function callback(data) { assert.equal(data, "<div>sign in here</div>"); }
+);
+
 /*
 ### Embed files:
 ####The Markup:

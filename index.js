@@ -76,6 +76,10 @@
         
         if(val == undefined) { val = predefines[key]; }
         if(anchors.isAnchor(key)) { anchors.append(key, defVal); callback(""); return; }
+        if(/(.+?)\[(.+?)\]/.test(key)) { // is Transform
+            var match = /(.+?)\[(.+?)\]/.exec(key);
+            val = transforms[match[1]](match[2]);
+        }
         if(val == undefined) { callback(defVal); return; }
         
         if(toString.call(val) === "[object Number]") { callback(val.toString()); return; }
@@ -173,6 +177,23 @@
         "file^": function unboundFile(callback, path, context) {
             retrieveFile(path, function(data) { callback(data, context, true); });
         } 
+    };
+    
+    var transforms = {
+        "if": function(key) {
+            return function(callback, defVal, context) {
+                bind.to(
+                    levelUp(defVal), {
+                        "then": function(callback, defVal) {
+                            if(context[key]) { callback(defVal); } else { callback(""); }
+                        },
+                        "else": function(callback, defVal) {
+                            if(context[key]) { callback(""); } else { callback(defVal); }
+                        }
+                    }, callback
+                );
+            };
+        }
     };
     
     function toFile(path, context, callback) {

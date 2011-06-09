@@ -282,6 +282,18 @@ This is useful when you want to reuse a template on the client side and on the s
                     </table>" */
     });
 
+### Making if/then/else statement
+####The Markup:
+    <div>(: if[signed-in] ~
+        [: then ~ Welcome user :]
+        [: else ~ Sign in here :]:)
+    </div>
+####The Code:
+    var bind = require("bind");
+
+    bind.toFile("./file.html",{ "signed-in": true },
+                function callback(data) { /* data === "<div>Welcome user</div>" */ });
+
 ## Fine points
 
 ### `null` vs `undefined`
