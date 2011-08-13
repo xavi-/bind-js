@@ -185,10 +185,12 @@
                 bind.to(
                     levelUp(defVal), {
                         "then": function(callback, defVal) {
-                            if(context[key]) { callback(defVal); } else { callback(""); }
+                            if(!context[key]) { callback(""); }
+                            else { callback(levelUp(defVal), context[key]); }
                         },
                         "else": function(callback, defVal) {
-                            if(context[key]) { callback(""); } else { callback(defVal); }
+                            if(context[key]) { callback(""); }
+                            else { callback(levelUp(defVal), context[key]); }
                         }
                     }, callback
                 );

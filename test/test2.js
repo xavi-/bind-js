@@ -174,6 +174,40 @@ bind.to(
     function callback(data) { assert.equal(data, "<div>sign in here</div>"); }
 );
 
+bind.to (
+    '(: all ~ [: if[error] ~ {: then ~ Error :} {: else ~ No Error :} :] -- :)',
+    {
+        all: [
+            {
+                two: 'sloff',
+                error: {
+                    message: 'error message'
+                }
+            },
+            {
+            }
+        ]
+    },
+    function (result) { assert.strictEqual (result, 'Error  -- No Error --'); }
+);
+
+bind.to (
+    '(: all ~ [: if[error] ~ {: then ~ |: message :| :} {: else ~ No Error :} :] -- :)',
+    {
+        all: [
+            {
+                two: 'sloff',
+                error: {
+                    message: 'error message'
+                }
+            },
+            {
+            }
+        ]
+    },
+    function (result) { assert.strictEqual (result, 'error message  -- No Error --'); }
+);
+
 /*
 ### Embed files:
 ####The Markup:
