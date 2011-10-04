@@ -38,10 +38,23 @@
         
         return (function() { // on server side
             var fs = require("fs");
+            var cache = {};
+            
+            function watchCache(path) {
+                if(path in cache) { return; }
+                
+                cache[path] = null;
+                fs.watchFile(path, function() { cache[path] = null; });
+            }
+            
             return function serverFile(path, callback) {
+                if(cache[path]) { return callback(cache[path]); }
+                
                 fs.readFile(path, function(err, data) {
                     if(err) { throw err; }
                     
+                    watchCache(path);
+                    cache[path] = data;
                     callback(data); 
                 });
             };
