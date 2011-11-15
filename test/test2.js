@@ -208,6 +208,8 @@ bind.to (
     function (result) { assert.strictEqual (result, 'error message  -- No Error --'); }
 );
 
+bind.to("(: aaa ~ [: bbb ~ {: ccc ~ |: ddd ~ def :| :} :] :)", {}, function(data) { assert.equal(data, "def"); });
+
 /*
 ### Embed files:
 ####The Markup:

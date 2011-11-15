@@ -93,7 +93,6 @@
             var match = /(.+?)\[(.+?)\]/.exec(key);
             val = transforms[match[1]](match[2]);
         }
-        if(val == undefined) { callback(defVal); return; }
         
         if(toString.call(val) === "[object Number]") { callback(val.toString()); return; }
         
@@ -108,6 +107,8 @@
         }
         
         defVal = levelUp(defVal);
+        if(val == undefined) { bind.to(defVal, {}, callback); return; }
+        
         if(toString.call(val) === "[object Boolean]") {
             if(val) { bind.to(defVal, context, callback); } else { callback(""); }
             return;
@@ -189,8 +190,9 @@
         },
         "file^": function unboundFile(callback, path, context) {
             retrieveFile(path, function(data) { callback(data, context, true); });
-        } 
+        }
     };
+    predefines["file-unescape"] = predefines["file^"];
     
     var transforms = {
         "if": function(key) {
@@ -250,4 +252,5 @@
     };
     bind.toFile = toFile;
     bind.to = to;
+    bind.predefines = predefines;
 }) (typeof exports === "object" ? exports : (window.bind = {}));
