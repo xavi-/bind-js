@@ -77,10 +77,92 @@ One of bind's core goals is to eliminate all conditional logic from templates, b
 
 To parallel the asynchronous nature of node.js, bound functions _must_ use the `callback` parameter to return data.  Note that the default value is passed as the second parameter and that the bind context is passed in as the third parameter.  Also, keep in mind that `.toString` is invoked on the value passed to `callback`.
 
-
 ### Bind Booleans
 ####The Markup:
-    (: signed-in? ~ Welcome back [: user-name :] :)
+
+null, undefined, number, boolean, string, function, array, object
+
+(: user? ~ Welcome back [: user :] :)
+(: !user ~ Hello, sign in / sign up :)
+
+(: user ~
+    [: user.signed-in? ~ Welcome back {: user.name :} :]
+    [: !user.signed-in ~ Hello, sign in / sign up :]
+:)
+
+<ul>
+(: fav-movies => [ one, two, rest... ] ~
+    <li class="even">[: one :]</li>
+    [: two? ~ <li class="odd">{: two :}</li> :]
+    <: $recurse[rest] :>
+:)
+</ul>
+
+<ul>
+(: fav-movies => [ one{5}, two, rest... ] ~
+    <li class="even">[: one :]</li>
+    [: two? ~ <li class="odd">{: two :}</li> :]
+:)
+</ul>
+
+(: blog-entries => [ { "title": title, 'summary': summary, date: date }... ] ~
+    <li>
+        <h3>[: title :]</h3>
+        <p>[: summary :]</p>
+        <time>[: date :]</time>
+    </li>
+:)
+
+
+(: blog-entries => [ entry:{ data, title, author }... ] ~
+    <li>
+        <h3>[: title :]</h3>
+        <p>[: entry.summary :]</p>
+        <time>[: date :]</time>
+    </li>
+:)
+
+(: entries[] ~
+    <li>
+        <h3>[: entries.title :]</h3>
+        <p>[: entries.summary :]</p>
+        <time>[: entries.date :]</time>
+    </li>
+:)
+
+(: entries[1,4] => [ one, two ]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    <li>
+        <h3>[: entries.title :]</h3>
+        <p>[: entries.summary :]</p>
+        <time>[: entries.date :]</time>
+    </li>
+:)
+
+(: entries[::-1] => [ { title, summary, date }... ]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    <li>
+        <h3>[: title :]</h3>
+        <p>[: summary :]</p>
+        <time>[: date :]</time>
+    </li>
+:)
+
+(: entries ~
+    <li>
+        <h3>[: entries[1].title :]</h3>
+        <p>[: entries[2].summary :]</p>
+        <time>[: entries.date :]</time>
+    </li>
+:)
+
+(: entries ~
+    <div>
+        <p>[: entries[::2].name :]</p>
+        <p>[: entries[1::2].name :]</p>
+    </div>
+:)
+
 ####The Code
     var bind = require("bind");
 
