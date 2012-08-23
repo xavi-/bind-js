@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/xavi-/bind-js.png)](http://travis-ci.org/xavi-/bind-js)
 # BindJS
 
 A simple templating engine for node.js that smiles back.  It's influenced by mustache and the [lift](http://liftweb.net/) [templating engine](http://www.assembla.com/wiki/show/liftweb/View_First).
