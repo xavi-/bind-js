@@ -1,26 +1,21 @@
 (function(bind, undefined) {
+    /*global ActiveXObject */
     var toString = Object.prototype.toString;
     
     var nextTick = (function() {
         if(typeof process !== "undefined") {
             return function(fn) { process.nextTick(fn); };
         } else {
-            return function(fn) { setTimeout(fn, 0); }
+            return function(fn) { setTimeout(fn, 0); };
         }
     })();
-    
-    var log = (function() {
-        if(typeof console !== "undefined") { return function(text) { console.log(text); }; }
-        
-        return function(text) { };
-    })();
-    
+
     var retrieveFile, defaultRetrieveFile;
     retrieveFile = defaultRetrieveFile = (function() {
         if(typeof window !== "undefined") { // on client side
             return (function() {
-                function xhr() { 
-                    return window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest(); 
+                function xhr() {
+                    return window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
                 }
                 
                 return function clientFile(path, callback) {
@@ -66,7 +61,7 @@
                     var success = watchCache(path);
                     if(success) { cache[path] = data; }
 
-                    callback(data); 
+                    callback(data);
                 });
             };
         })();
@@ -74,22 +69,22 @@
     
     function unescape(val) {
         return val.replace(/\(\\:/g, "(:").replace(/:\\\)/g, ":)")
-                  .replace(/\[\\:/g, "[:").replace(/:\\]/g, ":]")
-                  .replace(/\{\\:/g, "{:").replace(/:\\}/g, ":}")
+                  .replace(/\[\\:/g, "[:").replace(/:\\\]/g, ":]")
+                  .replace(/\{\\:/g, "{:").replace(/:\\\}/g, ":}")
                   .replace(/\|\\:/g, "|:").replace(/:\\\|/g, ":|")
                   .replace(/\/\\:/g, "\\:").replace(/:\/\\/g, ":\\")
                   .replace(/\(\^\\:/g, "(^:").replace(/:\\\^\)/g, ":^)");
     }
     
-    function levelUp(val) { 
-        return val.replace(/\[:/g, "(:").replace(/:]/g, ":)")
-                  .replace(/\{:/g, "[:").replace(/:}/g, ":]")
+    function levelUp(val) {
+        return val.replace(/\[:/g, "(:").replace(/:\]/g, ":)")
+                  .replace(/\{:/g, "[:").replace(/:\}/g, ":]")
                   .replace(/\|:/g, "{:").replace(/:\|/g, ":}")
                   .replace(/\/:/g, "|:").replace(/:\//g, ":|");
     }
     
     function binder(tag, context, predefines, callback) {
-        if(context == undefined) { callback(""); return; }
+        if(context == null) { callback(""); return; }
         
         var split = tag.match(/\(:\s*(.+?)\s*~\s*([\s\S]+?)\s*:\)/) || [];
         var key = split[1] || tag.match(/\(:\s*(.+?)\s*:\)/)[1];
@@ -98,7 +93,7 @@
         
         if(val === null) { callback(""); return; }
         
-        if(val == undefined) { val = predefines[key]; }
+        if(val == null) { val = predefines[key]; }
         if(anchors.isAnchor(key)) { anchors.append(key, defVal); callback(""); return; }
         if(/(.+?)\[(.+?)\]/.test(key)) { // is Transform
             var match = /(.+?)\[(.+?)\]/.exec(key);
@@ -118,7 +113,7 @@
         }
         
         defVal = levelUp(defVal);
-        if(val == undefined) { bind.to(defVal, {}, callback); return; }
+        if(val == null) { bind.to(defVal, {}, callback); return; }
         
         if(toString.call(val) === "[object Boolean]") {
             if(val) { bind.to(defVal, context, callback); } else { callback(""); }
@@ -134,7 +129,7 @@
             return function() { if(count-- === 0) { callback(bindArray.join("")); } };
         })();
         for(var i = 0; i < val.length; i++) {
-            bind.to(defVal, val[i], (function(i) { 
+            bind.to(defVal, val[i], (function(i) {
                 return function(data) { bindArray[i] = data; fireCallback(); };
             })(i));
         }
@@ -153,7 +148,7 @@
             return { id: id, callback: function(data) { map[id] = data; } };
         }
         
-        function add(data) { 
+        function add(data) {
             var id = nextId();
             map[id] = data;
             return id;
@@ -166,7 +161,7 @@
                 if(rtn === undefined) { return id; }
                 
                 delete map[id];
-                return restore(rtn); 
+                return restore(rtn);
             });
         }
         
@@ -190,7 +185,7 @@
                 delete anchors[id];
                 return restore(rtn);
             });
-        };
+        }
         
         return { restore: restore, append: append, isAnchor: isAnchor };
     })();
@@ -240,9 +235,9 @@
         // Removed and store escaped blocks
         var tmp = template.replace(/\(\^:([\s\S]+?):\^\)/g, function(_, match) { return snips.add(match); });
         
-        var tagCount = 0;    
+        var tagCount = 0;
         tmp = tmp.replace(/\(:[\s\S]+?:\)/g, function(tag) {
-            var snip = snips.create()
+            var snip = snips.create();
             
             tagCount += 1;
             
@@ -259,7 +254,7 @@
     }
     
     bind.setFileRetriever = function(retriever) {
-        retrieveFile = function() { return retriever.apply({ "default": defaultRetrieveFile }, arguments); }; 
+        retrieveFile = function() { return retriever.apply({ "default": defaultRetrieveFile }, arguments); };
     };
     bind.toFile = toFile;
     bind.to = to;
