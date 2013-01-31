@@ -44,7 +44,17 @@
                 if(path in cache) { return; }
                 
                 cache[path] = null;
-                fs.watchFile(path, function() { cache[path] = null; });
+                try { // Sometimes the OS can't watch any more files.  Shouldn't crash if that happens.
+                    fs.watchFile(path, function() { cache[path] = null; });
+                    return true;
+                } catch(e) {
+                    console.warn(
+                        "Error occured while trying to watch '" + path + "'.\n" +
+                        "To help figure out why, execute: echo 10000 | sudo tee /proc/sys/fs/inotify/max_user_watches"
+                    );
+                    console.warn("error: ", e);
+                    return false;
+                }
             }
             
             return function serverFile(path, callback) {
@@ -53,8 +63,9 @@
                 fs.readFile(path, function(err, data) {
                     if(err) { throw err; }
                     
-                    watchCache(path);
-                    cache[path] = data;
+                    var success = watchCache(path);
+                    if(success) { cache[path] = data; }
+
                     callback(data); 
                 });
             };
