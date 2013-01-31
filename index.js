@@ -40,7 +40,7 @@
                 
                 cache[path] = null;
                 try { // Sometimes the OS can't watch any more files.  Shouldn't crash if that happens.
-                    fs.watchFile(path, function() { cache[path] = null; });
+                    fs.watch(path, { persistent: false }, function() { cache[path] = null; });
                     return true;
                 } catch(e) {
                     console.warn(
