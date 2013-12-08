@@ -80,6 +80,9 @@ To parallel the asynchronous nature of node.js, bound functions _must_ use the `
 ### Bind Booleans
 ####The Markup:
 
+### Bind v2 ideas
+
+```
 null, undefined, number, boolean, string, function, array, object
 
 (: user? ~ Welcome back [: user :] :)
@@ -140,6 +143,8 @@ null, undefined, number, boolean, string, function, array, object
 :)
 
 (: entries[::-1] => [ { title, summary, date }... ]
+// A Comment
+# Or this?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     <li>
         <h3>[: title :]</h3>
@@ -162,7 +167,7 @@ null, undefined, number, boolean, string, function, array, object
         <p>[: entries[1::2].name :]</p>
     </div>
 :)
-
+```
 ####The Code
     var bind = require("bind");
 
