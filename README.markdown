@@ -37,18 +37,25 @@ Once executed an object called `window.bind` is created.  This object contains a
 ## Examples
 In the simplest case bind looks a lot like mustache
 
-####The Markup:
+#### The Markup:
+
     <h1>Hello, (:user:)</h1>
-####The Code:
+
+#### The Code:
+
     var bind = require("bind");
 
     bind.toFile("./file.html", { user: "Xavi" },
                 function callback(data) { /* data === "<h1>Hello, Xavi</h1>" */ });
 
 From there bind differs a bit.  For example, default values are supported:
-####The Markup:
+
+#### The Markup:
+
     <h1>Hello, (:user ~ Anonymous:)</h1>
-####The Code:
+   
+#### The Code:
+
     var bind = require("bind");
     
     bind.toFile("./file.html", {},
@@ -59,17 +66,17 @@ If the binding property (in this case `user`) is not found in the context object
 ### Bind Functions
 One of bind's core goals is to eliminate all conditional logic from templates, but to remain expressive bind supports binding to functions.
 
-####The Markup:
+#### The Markup:
     <span>The time: (:time:)</span>
-####The Code:
+#### The Code:
     var bind = require("bind");
 
     bind.toFile("./file.html", { time: function(callback) { callback(new Date()); } },
                 function callback(data) { /* data === "<span>The time: Tue Feb 23 2010 21:59:24 GMT-0500 (EST)</span>" */ });
 
-####The Markup:
+#### The Markup:
     <span>Two squared is (:square ~ 2:)</span>
-####The Code:
+#### The Code:
     var bind = require("bind");
 
     bind.toFile("./file.html", { square: function(callback, val) { callback(val * val); } },
@@ -79,9 +86,9 @@ To parallel the asynchronous nature of node.js, bound functions _must_ use the `
 
 
 ### Bind Booleans
-####The Markup:
+#### The Markup:
     (: signed-in? ~ Welcome back [: user-name :] :)
-####The Code
+#### The Code
     var bind = require("bind");
 
     bind.toFile("./file.html", { "signed-in?": false }, function callback(data) { /* data === "" */ });
@@ -90,12 +97,12 @@ To parallel the asynchronous nature of node.js, bound functions _must_ use the `
                 function callback(data) { /* data === "Welcome back Lisa" */ });
 
 ### Bind Objects
-####The Markup:
+#### The Markup:
     <div>(:blog-entry ~
         <h2>[:blog-title:]</h2>
         <span>[:publish-date:]</span>:)
     </div>
-####The Code:
+#### The Code:
     var bind = require("bind");
 
     bind.toFile("./file.html", 
@@ -108,12 +115,12 @@ To parallel the asynchronous nature of node.js, bound functions _must_ use the `
                 });
 
 ### Bind Arrays
-####The Markup:
+#### The Markup:
     <div>(:blog-entry ~
         <h2>[:blog-title:]</h2>
         <span>[:publish-date:]</span>:)
     </div>
-####The Code:
+#### The Code:
     var bind = require("bind");
 
     bind.toFile("./file.html", 
@@ -132,9 +139,9 @@ To parallel the asynchronous nature of node.js, bound functions _must_ use the `
                 });
 
 ### Embed files:
-####The Markup:
+#### The Markup:
     <div>(:file ~ ./sales-report.txt:)</div>
-####The Code:
+#### The Code:
     var bind = require("bind");
 
     bind.toFile("./file.html", {}, 
@@ -144,12 +151,12 @@ All paths are relative of the current working directory of the node process (aka
 
 By default the content of the embedded file is bound and escaped.  To simply embed the unescaped contents of a file, use `file^` instead.
 
-####The Markup:
+#### The Markup:
     <div>(:file ~ ./status-template.html:)</div>
     <script id="status-template">
         (:file^ ~ ./status-template.html:)
     </script>
-####The Code:
+#### The Code:
     var bind = require("bind");
 
     bind.toFile("./file.html", { "user-img": "fred.jpg", status: "Rockin' hard..." }, 
@@ -158,7 +165,7 @@ By default the content of the embedded file is bound and escaped.  To simply emb
 This is useful when you want to reuse a template on the client side and on the server while rendering the page.
 
 ### Deeply Nested Templates
-####The Markup:
+#### The Markup:
     <table>
         <tr><th colspan=2>(:month-name:)</th></tr>
         (: weeks ~
@@ -179,7 +186,7 @@ This is useful when you want to reuse a template on the client side and on the s
             </td>:]
         </tr>:)
     </table>
-####The Code:
+#### The Code:
     var bind = require("bind");
 
     var ctx = { "month-name": "March",
@@ -283,12 +290,12 @@ This is useful when you want to reuse a template on the client side and on the s
     });
 
 ### Making if/then/else statement
-####The Markup:
+#### The Markup:
     <div>(: if[signed-in] ~
         [: then ~ Welcome user :]
         [: else ~ Sign in here :]:)
     </div>
-####The Code:
+#### The Code:
     var bind = require("bind");
 
     bind.toFile("./file.html",{ "signed-in": true },
@@ -300,10 +307,10 @@ This is useful when you want to reuse a template on the client side and on the s
 
 In order to allow for the fine control of mark up bind makes a distinction of `null` and `undefined`.  Matches against `null` result in an empty string, while a match against `undefined` outputs the default value.
 
-####The Markup:
+#### The Markup:
     <div>(:foo ~ bar:)</div>
     <div>(:wee ~ poo:)</div>
-####The Code:
+#### The Code:
     var bind = require("bind");
 
     bind.toFile("./file.html", { foo: null }, 
